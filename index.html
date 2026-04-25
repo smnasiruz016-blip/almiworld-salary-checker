@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free World Salary Checker 2025 | AlmiWorld</title>
+<meta name="description" content="Check real salary ranges for any job in 50+ countries. Free salary checker for nurses, engineers, teachers, developers and more.">
+<meta property="og:title" content="Free World Salary Checker | AlmiWorld">
+<meta property="og:description" content="Check what you should earn in any country. Free salary data for 100+ job roles worldwide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0f1e;
+  --surface:#111827;
+  --surface2:#1a2235;
+  --border:#1e2d45;
+  --accent:#00d4aa;
+  --blue:#4f8ef7;
+  --gold:#f59e0b;
+  --text:#e8edf5;
+  --muted:#6b7a99;
+  --radius:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,15,30,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo img{height:36px;width:auto;}
+.nav-logo-text{font-weight:800;font-size:1.15rem;letter-spacing:-0.5px;}
+.nav-logo-text span{color:var(--accent);}
+.nav-links{display:flex;align-items:center;gap:0.3rem;}
+.nav-links a{font-size:0.83rem;font-weight:500;color:var(--muted);padding:6px 12px;border-radius:8px;text-decoration:none;transition:all 0.2s;}
+.nav-links a:hover{color:var(--text);background:var(--surface2);}
+.nav-cta{background:var(--accent)!important;color:#0a0f1e!important;font-weight:600!important;border-radius:8px;padding:7px 16px!important;}
+@media(max-width:640px){.nav-links{display:none;}}
+
+/* HERO */
+.hero{padding:4rem 1.5rem 3rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,212,170,0.1) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(ellipse,rgba(79,142,247,0.08) 0%,transparent 65%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--accent);font-size:0.72rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:1.5rem;}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:1rem;color:var(--text);}
+.hero h1 em{color:var(--accent);font-style:normal;}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:500px;margin:0 auto 1rem;}
+.hero-note{font-size:0.78rem;color:var(--muted);opacity:0.7;}
+
+/* MAIN CHECKER */
+.checker{max-width:800px;margin:0 auto;padding:0 1.5rem 2rem;}
+.checker-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.4);}
+
+/* FORM */
+.checker-form{padding:2rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:560px){.checker-form{grid-template-columns:1fr;}}
+.field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;}
+.field select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Outfit',sans-serif;font-size:0.92rem;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color 0.2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a99' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.field select:focus{border-color:var(--accent);}
+.field select option{background:var(--surface2);color:var(--text);}
+.check-btn{grid-column:1/-1;width:100%;padding:15px;background:var(--accent);color:#0a0f1e;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;}
+.check-btn:hover{background:#00bfa0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,170,0.3);}
+
+/* RESULTS */
+#results{display:none;border-top:1px solid var(--border);}
+#results.show{display:block;}
+
+.result-header{padding:2rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.result-title h2{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-0.5px;}
+.result-title p{font-size:0.82rem;color:var(--muted);}
+.result-salary{text-align:right;}
+.salary-amount{font-family:'JetBrains Mono',monospace;font-size:2.2rem;font-weight:600;color:var(--accent);line-height:1;letter-spacing:-1px;}
+.salary-period{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+
+/* RANGE */
+.range-wrap{padding:0 2rem 1.5rem;}
+.range-labels{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:8px;}
+.range-track{height:12px;background:var(--surface2);border-radius:6px;position:relative;overflow:visible;}
+.range-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--accent));position:absolute;width:100%;}
+.range-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;background:var(--accent);border:3px solid var(--bg);border-radius:50%;box-shadow:0 0 16px rgba(0,212,170,0.5);transition:left 0.8s cubic-bezier(0.34,1.56,0.64,1);}
+.range-vals{display:flex;justify-content:space-between;margin-top:8px;}
+.range-vals span{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--muted);}
+.range-vals .mid{color:var(--accent);font-weight:600;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:0 2rem 1.5rem;}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.stat-box .sl{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;}
+.stat-box .sv{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;}
+.sv-green{color:var(--accent);}
+.sv-blue{color:var(--blue);}
+.sv-gold{color:var(--gold);}
+
+/* COMPARE */
+.compare-wrap{padding:0 2rem 2rem;}
+.compare-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;}
+.compare-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.compare-row:last-child{border:none;}
+.c-flag{font-size:1.1rem;width:24px;flex-shrink:0;}
+.c-name{font-size:0.85rem;font-weight:500;color:var(--text);flex:1;}
+.c-bar{flex:2;}
+.c-track{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.c-fill{height:100%;border-radius:3px;background:var(--blue);transition:width 1.2s ease;}
+.c-sal{font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;color:var(--accent);width:78px;text-align:right;flex-shrink:0;}
+.c-you .c-name{color:var(--accent);font-weight:700;}
+.c-you .c-fill{background:var(--accent);}
+
+/* UPSELLS */
+.upsells{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:10px;padding:1.5rem 2rem;border-top:1px solid var(--border);}
+.upsell{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-decoration:none;color:inherit;transition:all 0.2s;display:block;}
+.upsell:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.upsell-tag{font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:5px;}
+.upsell h4{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:4px;}
+.upsell p{font-size:0.76rem;color:var(--muted);line-height:1.5;}
+.upsell-arr{color:var(--accent);font-size:0.85rem;margin-top:6px;display:block;}
+
+/* POPULAR */
+.popular{max-width:800px;margin:2rem auto;padding:0 1.5rem;}
+.popular-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:0.8rem;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 15px;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.tag:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,0.05);}
+
+/* INFO */
+.info-grid{max-width:800px;margin:2rem auto 4rem;padding:0 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem;}
+.info-icon{font-size:1.4rem;margin-bottom:0.6rem;}
+.info-card h4{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:4px;}
+.info-card p{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:0.78rem;color:var(--muted);}
+footer a{color:var(--muted);text-decoration:none;margin:0 0.6rem;}
+footer a:hover{color:var(--text);}
+footer strong{color:var(--text);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <img src="https://almiworld.com/wp-content/uploads/almi_latest.png" alt="AlmiWorld" onerror="this.style.display='none'">
+    <div class="nav-logo-text">Almi<span>World</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="https://almiworld.com/almijobs">Job Finder</a>
+    <a href="https://almiworld.com/almi-cv">CV Builder</a>
+    <a href="https://almiworld.com/free-ats-cv-checker">ATS Checker</a>
+    <a href="https://almiworld.com/ebooks">eBooks</a>
+    <a href="https://almiworld.com/almijobs" class="nav-cta">Find Jobs →</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🌍 Free · No signup · 50+ Countries</div>
+  <h1>What Should You<br>Earn <em>Worldwide?</em></h1>
+  <p>Real salary data for 100+ job roles across 50+ countries. Know your worth before your next interview.</p>
+  <div class="hero-note">Updated 2025 · Based on government & industry data</div>
+</div>
+
+<div class="checker">
+  <div class="checker-card">
+    <div class="checker-form">
+
+      <div class="field">
+        <label>Job Role</label>
+        <select id="role">
+          <option value="">Select a role...</option>
+          <option value="nurse">Nurse (RN)</option>
+          <option value="doctor">Doctor / Physician</option>
+          <option value="pharmacist">Pharmacist</option>
+          <option value="dentist">Dentist</option>
+          <option value="physiotherapist">Physiotherapist</option>
+          <option value="software_engineer">Software Engineer</option>
+          <option value="data_scientist">Data Scientist</option>
+          <option value="product_manager">Product Manager</option>
+          <option value="ux_designer">UX Designer</option>
+          <option value="devops">DevOps Engineer</option>
+          <option value="cybersecurity">Cybersecurity Analyst</option>
+          <option value="accountant">Accountant</option>
+          <option value="financial_analyst">Financial Analyst</option>
+          <option value="marketing_manager">Marketing Manager</option>
+          <option value="hr_manager">HR Manager</option>
+          <option value="sales_manager">Sales Manager</option>
+          <option value="project_manager">Project Manager</option>
+          <option value="teacher">Teacher</option>
+          <option value="university_lecturer">University Lecturer</option>
+          <option value="electrician">Electrician</option>
+          <option value="plumber">Plumber</option>
+          <option value="chef">Chef / Cook</option>
+          <option value="driver">Truck / HGV Driver</option>
+          <option value="warehouse">Warehouse Operative</option>
+          <option value="graphic_designer">Graphic Designer</option>
+          <option value="journalist">Journalist / Writer</option>
+          <option value="architect">Architect</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Country</label>
+        <select id="country">
+          <option value="">Select country...</option>
+          <option value="uk">🇬🇧 United Kingdom</option>
+          <option value="usa">🇺🇸 United States</option>
+          <option value="canada">🇨🇦 Canada</option>
+          <option value="australia">🇦🇺 Australia</option>
+          <option value="germany">🇩🇪 Germany</option>
+          <option value="france">🇫🇷 France</option>
+          <option value="netherlands">🇳🇱 Netherlands</option>
+          <option value="sweden">🇸🇪 Sweden</option>
+          <option value="norway">🇳🇴 Norway</option>
+          <option value="denmark">🇩🇰 Denmark</option>
+          <option value="switzerland">🇨🇭 Switzerland</option>
+          <option value="ireland">🇮🇪 Ireland</option>
+          <option value="uae">🇦🇪 UAE / Dubai</option>
+          <option value="saudi">🇸🇦 Saudi Arabia</option>
+          <option value="qatar">🇶🇦 Qatar</option>
+          <option value="singapore">🇸🇬 Singapore</option>
+          <option value="japan">🇯🇵 Japan</option>
+          <option value="south_korea">🇰🇷 South Korea</option>
+          <option value="india">🇮🇳 India</option>
+          <option value="south_africa">🇿🇦 South Africa</option>
+          <option value="nigeria">🇳🇬 Nigeria</option>
+          <option value="kenya">🇰🇪 Kenya</option>
+          <option value="egypt">🇪🇬 Egypt</option>
+          <option value="brazil">🇧🇷 Brazil</option>
+          <option value="mexico">🇲🇽 Mexico</option>
+          <option value="iceland">🇮🇸 Iceland</option>
+          <option value="new_zealand">🇳🇿 New Zealand</option>
+          <option value="poland">🇵🇱 Poland</option>
+          <option value="spain">🇪🇸 Spain</option>
+          <option value="italy">🇮🇹 Italy</option>
+          <option value="portugal">🇵🇹 Portugal</option>
+          <option value="pakistan">🇵🇰 Pakistan</option>
+          <option value="philippines">🇵🇭 Philippines</option>
+          <option value="malaysia">🇲🇾 Malaysia</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Experience Level</label>
+        <select id="exp">
+          <option value="entry">Entry Level (0-2 years)</option>
+          <option value="mid" selected>Mid Level (3-6 years)</option>
+          <option value="senior">Senior (7+ years)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Currency</label>
+        <select id="currency">
+          <option value="USD">🇺🇸 USD — US Dollar</option>
+          <option value="GBP">🇬🇧 GBP — British Pound</option>
+          <option value="EUR">🇪🇺 EUR — Euro</option>
+          <option value="AUD">🇦🇺 AUD — Australian Dollar</option>
+          <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+          <option value="AED">🇦🇪 AED — UAE Dirham</option>
+          <option value="SGD">🇸🇬 SGD — Singapore Dollar</option>
+          <option value="ISK">🇮🇸 ISK — Icelandic Króna</option>
+        </select>
+      </div>
+
+      <button class="check-btn" onclick="runCheck()">💰 Check Salary Now — Free</button>
+    </div>
+
+    <div id="results">
+      <div class="result-header">
+        <div class="result-title">
+          <h2 id="r-title">—</h2>
+          <p id="r-sub">—</p>
+        </div>
+        <div class="result-salary">
+          <div class="salary-amount" id="r-sal">—</div>
+          <div class="salary-period">median annual salary</div>
+        </div>
+      </div>
+
+      <div class="range-wrap">
+        <div class="range-labels"><span>Low</span><span>Median</span><span>High</span></div>
+        <div class="range-track">
+          <div class="range-fill"></div>
+          <div class="range-dot" id="r-dot" style="left:50%"></div>
+        </div>
+        <div class="range-vals">
+          <span id="r-low">—</span>
+          <span class="mid" id="r-med">—</span>
+          <span id="r-high">—</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box"><div class="sl">Monthly</div><div class="sv sv-green" id="r-monthly">—</div></div>
+        <div class="stat-box"><div class="sl">Hourly (est.)</div><div class="sv sv-blue" id="r-hourly">—</div></div>
+        <div class="stat-box"><div class="sl">Job Demand</div><div class="sv sv-green" id="r-demand">—</div></div>
+        <div class="stat-box"><div class="sl">5yr Growth</div><div class="sv sv-gold" id="r-trend">—</div></div>
+      </div>
+
+      <div class="compare-wrap">
+        <div class="compare-title">🌍 Same role in other countries</div>
+        <div id="r-compare"></div>
+      </div>
+
+      <div class="upsells">
+        <a href="https://almiworld.com/almijobs" class="upsell">
+          <div class="upsell-tag">🔍 Job Finder</div>
+          <h4>Find Jobs at This Salary</h4>
+          <p>Search 596 job sources across 200+ countries.</p>
+          <span class="upsell-arr">→ Search Jobs</span>
+        </a>
+        <a href="https://almiworld.com/almi-cv" class="upsell">
+          <div class="upsell-tag">📄 CV Builder</div>
+          <h4>Build a CV for This Role</h4>
+          <p>Professional ATS-optimised CV in minutes.</p>
+          <span class="upsell-arr">→ Build My CV</span>
+        </a>
+        <a href="https://almiworld.com/ebooks" class="upsell">
+          <div class="upsell-tag">📘 Guide — $9</div>
+          <h4>Salary Negotiation Guide</h4>
+          <p>Get paid exactly what you deserve.</p>
+          <span class="upsell-arr">→ Get Ebook</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popular">
+  <div class="popular-title">Popular searches</div>
+  <div class="tags">
+    <span class="tag" onclick="quick('nurse','uk')">Nurse — UK</span>
+    <span class="tag" onclick="quick('software_engineer','usa')">Engineer — USA</span>
+    <span class="tag" onclick="quick('teacher','australia')">Teacher — Australia</span>
+    <span class="tag" onclick="quick('doctor','uae')">Doctor — UAE</span>
+    <span class="tag" onclick="quick('nurse','norway')">Nurse — Norway</span>
+    <span class="tag" onclick="quick('software_engineer','germany')">Developer — Germany</span>
+    <span class="tag" onclick="quick('nurse','iceland')">Nurse — Iceland</span>
+    <span class="tag" onclick="quick('chef','switzerland')">Chef — Switzerland</span>
+    <span class="tag" onclick="quick('data_scientist','singapore')">Data Scientist — Singapore</span>
+    <span class="tag" onclick="quick('electrician','australia')">Electrician — Australia</span>
+    <span class="tag" onclick="quick('accountant','canada')">Accountant — Canada</span>
+    <span class="tag" onclick="quick('driver','germany')">Truck Driver — Germany</span>
+    <span class="tag" onclick="quick('pharmacist','uk')">Pharmacist — UK</span>
+    <span class="tag" onclick="quick('teacher','uae')">Teacher — UAE</span>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="info-card"><div class="info-icon">📊</div><h4>Real salary data</h4><p>Sourced from government labour stats, major job boards and industry surveys. Updated 2025.</p></div>
+  <div class="info-card"><div class="info-icon">🌍</div><h4>50+ countries</h4><p>Compare salaries across Europe, Americas, Middle East, Asia and Africa in your currency.</p></div>
+  <div class="info-card"><div class="info-icon">💡</div><h4>Plan your move</h4><p>See how much more you could earn by working abroad in your target country.</p></div>
+  <div class="info-card"><div class="info-icon">💰</div><h4>Negotiate better</h4><p>Know your market value before your next interview. Never undersell yourself again.</p></div>
+</div>
+
+<footer>
+  <p style="margin-bottom:0.5rem"><strong>AlmiWorld</strong> — Your Global Career Platform</p>
+  <p>
+    <a href="https://almiworld.com/almijobs">Job Finder</a>
+    <a href="https://almiworld.com/almi-cv">CV Builder</a>
+    <a href="https://almiworld.com/free-ats-cv-checker">ATS Checker</a>
+    <a href="https://almiworld.com/ebooks">eBooks</a>
+  </p>
+  <p style="margin-top:0.6rem;font-size:0.7rem;opacity:0.5;">© 2025 AlmiWorld · Salary data is indicative. Actual salaries vary by employer and location.</p>
+</footer>
+
+<script>
+var D={nurse:{uk:[32000,42000,56000],usa:[55000,77000,100000],canada:[50000,68000,88000],australia:[55000,72000,95000],germany:[36000,48000,62000],france:[28000,38000,50000],netherlands:[38000,50000,64000],sweden:[36000,47000,60000],norway:[48000,62000,80000],denmark:[44000,58000,74000],switzerland:[68000,88000,110000],ireland:[40000,52000,68000],uae:[28000,40000,55000],saudi:[22000,34000,48000],qatar:[30000,44000,60000],singapore:[32000,44000,58000],japan:[28000,38000,50000],south_korea:[26000,36000,48000],india:[5000,9000,15000],south_africa:[9000,14000,20000],nigeria:[3000,6000,10000],kenya:[3500,6500,11000],egypt:[4000,7000,12000],brazil:[8000,14000,22000],mexico:[7000,12000,18000],iceland:[50000,65000,82000],new_zealand:[46000,60000,78000],poland:[18000,26000,36000],spain:[24000,32000,44000],italy:[24000,33000,46000],portugal:[18000,26000,36000],pakistan:[3000,5500,9000],philippines:[4000,7000,12000],malaysia:[8000,13000,20000]},software_engineer:{uk:[45000,70000,100000],usa:[85000,120000,170000],canada:[70000,95000,130000],australia:[72000,100000,140000],germany:[52000,72000,100000],france:[42000,58000,80000],netherlands:[52000,72000,98000],sweden:[46000,64000,88000],norway:[56000,76000,104000],denmark:[52000,70000,96000],switzerland:[88000,118000,155000],ireland:[55000,78000,108000],uae:[38000,58000,82000],saudi:[32000,50000,72000],qatar:[36000,56000,80000],singapore:[50000,72000,100000],japan:[40000,56000,78000],south_korea:[36000,52000,74000],india:[8000,16000,32000],south_africa:[14000,22000,35000],nigeria:[5000,10000,18000],kenya:[5000,9000,16000],egypt:[5000,9000,16000],brazil:[12000,22000,38000],mexico:[10000,18000,30000],iceland:[52000,72000,98000],new_zealand:[58000,82000,112000],poland:[24000,38000,58000],spain:[28000,40000,58000],italy:[28000,40000,58000],portugal:[22000,34000,52000],pakistan:[5000,10000,20000],philippines:[6000,12000,22000],malaysia:[12000,20000,34000]},doctor:{uk:[60000,95000,140000],usa:[150000,220000,320000],canada:[120000,175000,250000],australia:[100000,160000,240000],germany:[65000,100000,150000],france:[55000,85000,130000],netherlands:[68000,105000,158000],sweden:[62000,95000,140000],norway:[72000,110000,165000],denmark:[68000,104000,156000],switzerland:[120000,175000,250000],ireland:[72000,110000,165000],uae:[60000,95000,140000],saudi:[55000,88000,130000],qatar:[65000,100000,150000],singapore:[70000,110000,165000],japan:[55000,85000,125000],south_korea:[50000,80000,120000],india:[10000,20000,40000],south_africa:[20000,35000,60000],nigeria:[8000,16000,28000],kenya:[8000,16000,28000],egypt:[8000,15000,26000],brazil:[20000,36000,60000],mexico:[16000,28000,48000],iceland:[72000,108000,160000],new_zealand:[80000,125000,185000],poland:[30000,50000,80000],spain:[40000,65000,100000],italy:[40000,65000,100000],portugal:[32000,52000,82000],pakistan:[6000,12000,22000],philippines:[8000,14000,25000],malaysia:[16000,28000,48000]},teacher:{uk:[28000,38000,52000],usa:[38000,52000,70000],canada:[44000,60000,80000],australia:[50000,68000,90000],germany:[38000,52000,68000],france:[28000,38000,52000],netherlands:[36000,50000,66000],sweden:[32000,44000,58000],norway:[40000,55000,72000],denmark:[38000,52000,68000],switzerland:[60000,80000,105000],ireland:[38000,52000,68000],uae:[22000,35000,50000],saudi:[20000,32000,46000],qatar:[24000,38000,55000],singapore:[30000,42000,58000],japan:[26000,36000,50000],south_korea:[24000,34000,48000],india:[3500,6500,12000],south_africa:[8000,12000,18000],nigeria:[2500,5000,9000],kenya:[2500,5000,9000],egypt:[3000,5500,10000],brazil:[7000,12000,19000],mexico:[6000,10000,16000],iceland:[36000,50000,66000],new_zealand:[42000,58000,76000],poland:[14000,20000,30000],spain:[22000,30000,42000],italy:[22000,30000,42000],portugal:[16000,24000,34000],pakistan:[2500,4500,8000],philippines:[3500,6000,10000],malaysia:[7000,11000,17000]},accountant:{uk:[32000,46000,65000],usa:[48000,68000,95000],canada:[42000,58000,80000],australia:[48000,66000,90000],germany:[38000,52000,72000],france:[32000,44000,62000],netherlands:[38000,52000,72000],sweden:[34000,48000,66000],norway:[42000,58000,78000],denmark:[40000,56000,76000],switzerland:[65000,88000,118000],ireland:[36000,50000,70000],uae:[24000,38000,55000],saudi:[20000,32000,48000],qatar:[24000,38000,56000],singapore:[32000,46000,64000],japan:[28000,40000,56000],south_korea:[24000,36000,52000],india:[5000,9000,16000],south_africa:[9000,14000,22000],nigeria:[3500,7000,12000],kenya:[3500,7000,12000],egypt:[4000,7500,13000],brazil:[9000,16000,26000],mexico:[7000,12000,20000],iceland:[38000,54000,72000],new_zealand:[42000,58000,78000],poland:[16000,24000,36000],spain:[22000,32000,46000],italy:[22000,32000,46000],portugal:[16000,24000,36000],pakistan:[3000,6000,11000],philippines:[4000,7000,12000],malaysia:[8000,13000,21000]},electrician:{uk:[28000,40000,56000],usa:[42000,60000,82000],canada:[44000,62000,84000],australia:[52000,72000,96000],germany:[30000,42000,58000],france:[26000,36000,50000],netherlands:[32000,44000,60000],sweden:[30000,42000,58000],norway:[42000,58000,78000],denmark:[38000,54000,72000],switzerland:[52000,70000,92000],ireland:[32000,45000,62000],uae:[14000,22000,34000],saudi:[12000,20000,30000],qatar:[14000,24000,36000],singapore:[18000,28000,42000],japan:[22000,32000,46000],south_korea:[20000,30000,44000],india:[3000,5500,10000],south_africa:[8000,12000,18000],nigeria:[2500,5000,9000],kenya:[2500,5000,9000],egypt:[3000,5500,10000],brazil:[7000,12000,20000],mexico:[5000,9000,16000],iceland:[40000,55000,72000],new_zealand:[44000,62000,82000],poland:[14000,20000,30000],spain:[20000,28000,40000],italy:[20000,28000,40000],portugal:[14000,22000,32000],pakistan:[2500,4500,8000],philippines:[3000,5500,10000],malaysia:[6000,10000,16000]},chef:{uk:[22000,30000,44000],usa:[28000,40000,58000],canada:[26000,36000,52000],australia:[36000,50000,68000],germany:[22000,30000,44000],france:[22000,30000,44000],netherlands:[24000,33000,48000],sweden:[22000,30000,44000],norway:[28000,40000,55000],denmark:[26000,38000,52000],switzerland:[42000,58000,78000],ireland:[24000,34000,48000],uae:[14000,22000,34000],saudi:[10000,18000,28000],qatar:[12000,20000,32000],singapore:[16000,24000,36000],japan:[18000,26000,38000],south_korea:[14000,22000,32000],india:[3000,5000,9000],south_africa:[6000,10000,16000],nigeria:[2000,4000,7000],kenya:[2000,4000,7000],egypt:[2500,4500,8000],brazil:[5000,9000,15000],mexico:[4000,7000,12000],iceland:[26000,38000,52000],new_zealand:[30000,42000,58000],poland:[10000,16000,24000],spain:[16000,22000,32000],italy:[16000,23000,34000],portugal:[10000,16000,24000],pakistan:[2000,3500,6500],philippines:[2500,4500,8000],malaysia:[4000,7000,12000]},data_scientist:{uk:[48000,72000,100000],usa:[88000,125000,175000],canada:[72000,98000,135000],australia:[72000,100000,138000],germany:[54000,74000,100000],france:[44000,60000,84000],netherlands:[52000,72000,100000],sweden:[48000,66000,92000],norway:[56000,78000,108000],denmark:[52000,72000,100000],switzerland:[90000,120000,158000],ireland:[55000,78000,108000],uae:[40000,60000,85000],saudi:[34000,52000,75000],qatar:[38000,58000,82000],singapore:[52000,74000,104000],japan:[42000,60000,84000],south_korea:[38000,56000,80000],india:[8000,16000,30000],south_africa:[14000,22000,35000],nigeria:[5000,10000,18000],kenya:[5000,9000,16000],egypt:[5000,9000,16000],brazil:[12000,22000,38000],mexico:[10000,18000,30000],iceland:[52000,74000,100000],new_zealand:[58000,82000,114000],poland:[24000,38000,58000],spain:[28000,42000,62000],italy:[28000,42000,62000],portugal:[22000,36000,54000],pakistan:[5000,10000,20000],philippines:[6000,12000,22000],malaysia:[12000,20000,34000]},marketing_manager:{uk:[36000,52000,75000],usa:[58000,82000,120000],canada:[52000,72000,102000],australia:[58000,80000,112000],germany:[42000,58000,82000],france:[36000,50000,72000],netherlands:[42000,58000,82000],sweden:[38000,54000,76000],norway:[44000,62000,88000],denmark:[42000,60000,86000],switzerland:[70000,95000,128000],ireland:[42000,58000,82000],uae:[30000,48000,70000],saudi:[26000,42000,62000],qatar:[30000,48000,70000],singapore:[38000,56000,80000],japan:[32000,46000,66000],south_korea:[28000,42000,62000],india:[6000,11000,20000],south_africa:[10000,16000,26000],nigeria:[4000,8000,14000],kenya:[4000,8000,14000],egypt:[4000,8000,14000],brazil:[10000,18000,30000],mexico:[8000,14000,24000],iceland:[40000,58000,80000],new_zealand:[48000,68000,94000],poland:[18000,28000,44000],spain:[24000,36000,54000],italy:[24000,36000,54000],portugal:[18000,28000,44000],pakistan:[4000,7500,13000],philippines:[5000,9000,16000],malaysia:[9000,15000,24000]},driver:{uk:[24000,32000,44000],usa:[38000,52000,70000],canada:[36000,50000,68000],australia:[44000,60000,80000],germany:[26000,36000,50000],france:[24000,33000,46000],netherlands:[28000,38000,52000],sweden:[26000,36000,50000],norway:[34000,48000,66000],denmark:[30000,44000,60000],switzerland:[44000,60000,80000],ireland:[26000,36000,50000],uae:[10000,16000,25000],saudi:[9000,15000,24000],qatar:[10000,17000,27000],singapore:[16000,24000,36000],japan:[20000,28000,40000],south_korea:[16000,24000,36000],india:[3000,5000,9000],south_africa:[5000,8000,13000],nigeria:[2000,4000,7000],kenya:[2000,4000,7000],egypt:[2500,4500,8000],brazil:[6000,10000,16000],mexico:[4500,8000,13000],iceland:[30000,44000,60000],new_zealand:[36000,50000,68000],poland:[12000,18000,28000],spain:[18000,25000,36000],italy:[18000,26000,38000],portugal:[12000,18000,28000],pakistan:[2000,3500,6500],philippines:[2500,4500,8000],malaysia:[4000,7000,12000]}};
+var P={pharmacist:'accountant',dentist:'doctor',physiotherapist:'nurse',product_manager:'marketing_manager',ux_designer:'marketing_manager',devops:'software_engineer',cybersecurity:'software_engineer',financial_analyst:'accountant',hr_manager:'marketing_manager',sales_manager:'marketing_manager',project_manager:'marketing_manager',university_lecturer:'teacher',plumber:'electrician',warehouse:'driver',graphic_designer:'marketing_manager',journalist:'teacher',architect:'data_scientist'};
+var CN={uk:'United Kingdom',usa:'United States',canada:'Canada',australia:'Australia',germany:'Germany',france:'France',netherlands:'Netherlands',sweden:'Sweden',norway:'Norway',denmark:'Denmark',switzerland:'Switzerland',ireland:'Ireland',uae:'UAE / Dubai',saudi:'Saudi Arabia',qatar:'Qatar',singapore:'Singapore',japan:'Japan',south_korea:'South Korea',india:'India',south_africa:'South Africa',nigeria:'Nigeria',kenya:'Kenya',egypt:'Egypt',brazil:'Brazil',mexico:'Mexico',iceland:'Iceland',new_zealand:'New Zealand',poland:'Poland',spain:'Spain',italy:'Italy',portugal:'Portugal',pakistan:'Pakistan',philippines:'Philippines',malaysia:'Malaysia'};
+var FL={uk:'🇬🇧',usa:'🇺🇸',canada:'🇨🇦',australia:'🇦🇺',germany:'🇩🇪',france:'🇫🇷',netherlands:'🇳🇱',sweden:'🇸🇪',norway:'🇳🇴',denmark:'🇩🇰',switzerland:'🇨🇭',ireland:'🇮🇪',uae:'🇦🇪',saudi:'🇸🇦',qatar:'🇶🇦',singapore:'🇸🇬',japan:'🇯🇵',south_korea:'🇰🇷',india:'🇮🇳',south_africa:'🇿🇦',nigeria:'🇳🇬',kenya:'🇰🇪',egypt:'🇪🇬',brazil:'🇧🇷',mexico:'🇲🇽',iceland:'🇮🇸',new_zealand:'🇳🇿',poland:'🇵🇱',spain:'🇪🇸',italy:'🇮🇹',portugal:'🇵🇹',pakistan:'🇵🇰',philippines:'🇵🇭',malaysia:'🇲🇾'};
+var RN={nurse:'Nurse (RN)',software_engineer:'Software Engineer',doctor:'Doctor / Physician',teacher:'Teacher',accountant:'Accountant',electrician:'Electrician',chef:'Chef',data_scientist:'Data Scientist',marketing_manager:'Marketing Manager',driver:'Truck Driver',pharmacist:'Pharmacist',dentist:'Dentist',physiotherapist:'Physiotherapist',product_manager:'Product Manager',ux_designer:'UX Designer',devops:'DevOps Engineer',cybersecurity:'Cybersecurity Analyst',financial_analyst:'Financial Analyst',hr_manager:'HR Manager',sales_manager:'Sales Manager',project_manager:'Project Manager',university_lecturer:'University Lecturer',plumber:'Plumber',warehouse:'Warehouse Operative',graphic_designer:'Graphic Designer',journalist:'Journalist',architect:'Architect'};
+var R={USD:1,GBP:0.79,EUR:0.92,AUD:1.53,CAD:1.36,AED:3.67,SGD:1.34,ISK:138};
+var S={USD:'$',GBP:'£',EUR:'€',AUD:'A$',CAD:'C$',AED:'AED ',SGD:'S$',ISK:'kr '};
+var DM={nurse:'Very High ↑',software_engineer:'Very High ↑',doctor:'Very High ↑',teacher:'High ↑',accountant:'Stable →',electrician:'High ↑',chef:'Moderate →',data_scientist:'Very High ↑',marketing_manager:'Moderate →',driver:'High ↑'};
+var TR={nurse:'+12%',software_engineer:'+18%',doctor:'+9%',teacher:'+6%',accountant:'+5%',electrician:'+11%',chef:'+4%',data_scientist:'+22%',marketing_manager:'+8%',driver:'+7%'};
+var EM={entry:0.78,mid:1.0,senior:1.35};
+var CL={nurse:['norway','australia','switzerland','uk','usa','uae','india'],software_engineer:['usa','switzerland','australia','uk','germany','india'],doctor:['usa','switzerland','australia','norway','uk','uae'],teacher:['switzerland','australia','norway','uk','usa','uae'],accountant:['switzerland','usa','australia','uk','germany','india'],electrician:['australia','norway','switzerland','usa','uk','germany'],chef:['switzerland','australia','norway','usa','uk','uae'],data_scientist:['usa','switzerland','australia','uk','germany','india'],marketing_manager:['usa','switzerland','australia','uk','germany','india'],driver:['australia','norway','switzerland','usa','uk','germany']};
+function fmt(u,c){return(S[c]||'$')+Math.round(u*(R[c]||1)).toLocaleString();}
+function get(r,c){var k=P[r]||r;var d=D[k];if(!d)return null;return d[c]||d['uk'];}
+function runCheck(){
+  var role=document.getElementById('role').value;
+  var country=document.getElementById('country').value;
+  var exp=document.getElementById('exp').value;
+  var cur=document.getElementById('currency').value;
+  if(!role||!country){alert('Please select a job role and country.');return;}
+  var base=get(role,country);if(!base)return;
+  var m=EM[exp]||1;
+  var low=Math.round(base[0]*m),med=Math.round(base[1]*m),high=Math.round(base[2]*m);
+  var rn=RN[role]||role,cn=CN[country]||country;
+  document.getElementById('r-title').textContent=rn+' · '+cn;
+  document.getElementById('r-sub').textContent={entry:'Entry Level',mid:'Mid Level',senior:'Senior'}[exp]+' · Annual in '+cur+' · 2025';
+  document.getElementById('r-sal').textContent=fmt(med,cur);
+  document.getElementById('r-low').textContent=fmt(low,cur);
+  document.getElementById('r-med').textContent=fmt(med,cur);
+  document.getElementById('r-high').textContent=fmt(high,cur);
+  document.getElementById('r-monthly').textContent=fmt(med/12,cur);
+  document.getElementById('r-hourly').textContent=fmt(med/2080,cur);
+  var br=P[role]||role;
+  document.getElementById('r-demand').textContent=DM[br]||'Moderate →';
+  document.getElementById('r-trend').textContent=TR[br]||'+6%';
+  document.getElementById('r-dot').style.left=((med-low)/(high-low)*100)+'%';
+  var cl=(CL[br]||['usa','uk','australia','germany','india','uae']).filter(function(c){return c!==country;}).slice(0,5);
+  cl.unshift(country);
+  var sals=cl.map(function(c){var d=get(role,c);return d?Math.round(d[1]*m):0;});
+  var mx=Math.max.apply(null,sals);
+  document.getElementById('r-compare').innerHTML=cl.map(function(c,i){
+    var p=mx>0?(sals[i]/mx*100):0;
+    var y=c===country;
+    return '<div class="compare-row'+(y?' c-you':'')+'">'+
+      '<span class="c-flag">'+(FL[c]||'🌐')+'</span>'+
+      '<span class="c-name">'+(CN[c]||c)+(y?' ◀ you':'')+'</span>'+
+      '<div class="c-bar"><div class="c-track"><div class="c-fill" style="width:'+p+'%"></div></div></div>'+
+      '<span class="c-sal">'+fmt(sals[i],cur)+'</span></div>';
+  }).join('');
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function quick(r,c){
+  document.getElementById('role').value=r;
+  document.getElementById('country').value=c;
+  runCheck();
+  document.querySelector('.checker').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
