@@ -28,8 +28,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* NAV */
 nav{position:sticky;top:0;z-index:100;background:rgba(255,251,245,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{display:flex;align-items:center;gap:10px;}
-.nav-logo img{height:36px;width:auto;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.nav-logo img{height:42px;width:auto;display:block;}
 .nav-logo-text{font-weight:800;font-size:1.15rem;letter-spacing:-0.5px;}
 .nav-logo-text span{color:var(--accent);}
 .nav-links{display:flex;align-items:center;gap:0.3rem;}
@@ -131,6 +131,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,251,245,0.92);backdrop
 
 /* FOOTER */
 footer{background:var(--surface);border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:0.78rem;color:var(--muted);}
+.footer-logo{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:inherit;margin-bottom:0.5rem;}
+.footer-logo img{height:50px;width:auto;display:block;}
+.footer-logo-text{font-size:1.1rem;font-weight:800;color:var(--text);}
 footer a{color:var(--muted);text-decoration:none;margin:0 0.6rem;}
 footer a:hover{color:var(--text);}
 footer strong{color:var(--text);}
@@ -139,11 +142,12 @@ footer strong{color:var(--text);}
 <body>
 
 <nav>
-  <div class="nav-logo">
-    <img src="https://almiworld.com/wp-content/uploads/almi_latest.png" alt="AlmiWorld" onerror="this.style.display='none'">
-    <div class="nav-logo-text">Almi<span>World</span></div>
-  </div>
+  <a href="https://almiworld.com" class="nav-logo" aria-label="AlmiWorld home">
+    <img src="https://almiworld.com/wp-content/uploads/2026/04/almi-latest.png" alt="AlmiWorld" onerror="this.parentElement.querySelector('.nav-logo-text').style.display='block'; this.style.display='none';">
+    <div class="nav-logo-text" style="display:none;">Almi<span>World</span></div>
+  </a>
   <div class="nav-links">
+    <a href="https://almiworld.com">Home</a>
     <a href="https://almiworld.com/almijobs">Job Finder</a>
     <a href="https://almiworld.com/almi-cv">CV Builder</a>
     <a href="https://almiworld.com/free-ats-cv-checker">ATS Checker</a>
@@ -156,7 +160,7 @@ footer strong{color:var(--text);}
   <div class="hero-badge">🌍 Free · No signup · 50+ Countries</div>
   <h1>What Should You<br>Earn <em>Worldwide?</em></h1>
   <p>Real salary data for 100+ job roles across 50+ countries. Know your worth before your next interview.</p>
-  <div class="hero-note">Updated 2025 · Based on government & industry data</div>
+  <div class="hero-note">Updated 2026 · Based on government & industry data</div>
 </div>
 
 <div class="checker">
@@ -346,21 +350,26 @@ footer strong{color:var(--text);}
 </div>
 
 <div class="info-grid">
-  <div class="info-card"><div class="info-icon">📊</div><h4>Real salary data</h4><p>Sourced from government labour stats, major job boards and industry surveys. Updated 2025.</p></div>
+  <div class="info-card"><div class="info-icon">📊</div><h4>Real salary data</h4><p>Sourced from government labour stats, major job boards and industry surveys. Updated 2026.</p></div>
   <div class="info-card"><div class="info-icon">🌍</div><h4>50+ countries</h4><p>Compare salaries across Europe, Americas, Middle East, Asia and Africa in your currency.</p></div>
   <div class="info-card"><div class="info-icon">💡</div><h4>Plan your move</h4><p>See how much more you could earn by working abroad in your target country.</p></div>
   <div class="info-card"><div class="info-icon">💰</div><h4>Negotiate better</h4><p>Know your market value before your next interview. Never undersell yourself again.</p></div>
 </div>
 
 <footer>
-  <p style="margin-bottom:0.5rem"><strong>AlmiWorld</strong> — Your Global Career Platform</p>
+  <a href="https://almiworld.com" class="footer-logo" aria-label="AlmiWorld home">
+    <img src="https://almiworld.com/wp-content/uploads/2026/04/almi-latest.png" alt="AlmiWorld" onerror="this.parentElement.querySelector('.footer-logo-text').style.display='block'; this.style.display='none';">
+    <span class="footer-logo-text" style="display:none;"><strong>AlmiWorld</strong></span>
+  </a>
+  <p style="margin-top:0.5rem;margin-bottom:0.8rem;">Your Global Career Platform</p>
   <p>
+    <a href="https://almiworld.com">Home</a>
     <a href="https://almiworld.com/almijobs">Job Finder</a>
     <a href="https://almiworld.com/almi-cv">CV Builder</a>
     <a href="https://almiworld.com/free-ats-cv-checker">ATS Checker</a>
     <a href="https://almiworld.com/ebooks">eBooks</a>
   </p>
-  <p style="margin-top:0.6rem;font-size:0.7rem;opacity:0.5;">© 2025 AlmiWorld · Salary data is indicative. Actual salaries vary by employer and location.</p>
+  <p style="margin-top:0.6rem;font-size:0.7rem;opacity:0.5;">© 2026 AlmiWorld · Salary data is indicative. Actual salaries vary by employer and location.</p>
 </footer>
 
 <script>
