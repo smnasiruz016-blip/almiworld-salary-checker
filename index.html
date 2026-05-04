@@ -56,6 +56,18 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,251,245,0.92);backdrop
 .checker-form{padding:2rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @media(max-width:560px){.checker-form{grid-template-columns:1fr;}}
 .field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;}
+.field-hint{font-weight:400;color:var(--muted);font-size:0.78rem;margin-left:4px;}
+.role-input-wrap{position:relative;}
+.role-input-wrap input[type="text"]{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Outfit',sans-serif;font-size:0.92rem;color:var(--text);outline:none;transition:border-color 0.2s;}
+.role-input-wrap input[type="text"]:focus{border-color:var(--accent);}
+.role-suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;max-height:240px;overflow-y:auto;z-index:50;display:none;box-shadow:0 8px 24px rgba(45,27,61,0.10);}
+.role-suggestions.show{display:block;}
+.role-suggestion{padding:10px 16px;cursor:pointer;font-size:0.9rem;color:var(--text);transition:background 0.12s;}
+.role-suggestion:hover,.role-suggestion.active{background:var(--surface2);color:var(--accent);}
+.role-suggestion-empty{padding:14px 16px;font-size:0.88rem;color:var(--muted);font-style:italic;text-align:center;}
+.match-banner{margin:12px 18px 0;padding:10px 14px;background:rgba(212,162,76,0.10);border:1px solid rgba(212,162,76,0.25);border-radius:10px;font-size:0.85rem;color:var(--text);display:none;}
+.match-banner.show{display:block;}
+.match-banner strong{color:var(--gold);}
 .field select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Outfit',sans-serif;font-size:0.92rem;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color 0.2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B5B7A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
 .field select:focus{border-color:var(--accent);}
 .field select option{background:var(--surface2);color:var(--text);}
@@ -168,37 +180,12 @@ footer strong{color:var(--text);}
     <div class="checker-form">
 
       <div class="field">
-        <label>Job Role</label>
-        <select id="role">
-          <option value="">Select a role...</option>
-          <option value="nurse">Nurse (RN)</option>
-          <option value="doctor">Doctor / Physician</option>
-          <option value="pharmacist">Pharmacist</option>
-          <option value="dentist">Dentist</option>
-          <option value="physiotherapist">Physiotherapist</option>
-          <option value="software_engineer">Software Engineer</option>
-          <option value="data_scientist">Data Scientist</option>
-          <option value="product_manager">Product Manager</option>
-          <option value="ux_designer">UX Designer</option>
-          <option value="devops">DevOps Engineer</option>
-          <option value="cybersecurity">Cybersecurity Analyst</option>
-          <option value="accountant">Accountant</option>
-          <option value="financial_analyst">Financial Analyst</option>
-          <option value="marketing_manager">Marketing Manager</option>
-          <option value="hr_manager">HR Manager</option>
-          <option value="sales_manager">Sales Manager</option>
-          <option value="project_manager">Project Manager</option>
-          <option value="teacher">Teacher</option>
-          <option value="university_lecturer">University Lecturer</option>
-          <option value="electrician">Electrician</option>
-          <option value="plumber">Plumber</option>
-          <option value="chef">Chef / Cook</option>
-          <option value="driver">Truck / HGV Driver</option>
-          <option value="warehouse">Warehouse Operative</option>
-          <option value="graphic_designer">Graphic Designer</option>
-          <option value="journalist">Journalist / Writer</option>
-          <option value="architect">Architect</option>
-        </select>
+        <label>Job Role <span class="field-hint">— type any role or pick from list</span></label>
+        <div class="role-input-wrap">
+          <input type="text" id="role-text" placeholder="Type any job role (e.g., Welder, Yoga Instructor)" autocomplete="off">
+          <div id="role-suggestions" class="role-suggestions"></div>
+          <input type="hidden" id="role" value="">
+        </div>
       </div>
 
       <div class="field">
@@ -269,6 +256,7 @@ footer strong{color:var(--text);}
     </div>
 
     <div id="results">
+      <div id="match-banner" class="match-banner"></div>
       <div class="result-header">
         <div class="result-title">
           <h2 id="r-title">—</h2>
@@ -386,12 +374,146 @@ var EM={entry:0.78,mid:1.0,senior:1.35};
 var CL={nurse:['norway','australia','switzerland','uk','usa','uae','india'],software_engineer:['usa','switzerland','australia','uk','germany','india'],doctor:['usa','switzerland','australia','norway','uk','uae'],teacher:['switzerland','australia','norway','uk','usa','uae'],accountant:['switzerland','usa','australia','uk','germany','india'],electrician:['australia','norway','switzerland','usa','uk','germany'],chef:['switzerland','australia','norway','usa','uk','uae'],data_scientist:['usa','switzerland','australia','uk','germany','india'],marketing_manager:['usa','switzerland','australia','uk','germany','india'],driver:['australia','norway','switzerland','usa','uk','germany']};
 function fmt(u,c){return(S[c]||'$')+Math.round(u*(R[c]||1)).toLocaleString();}
 function get(r,c){var k=P[r]||r;var d=D[k];if(!d)return null;return d[c]||d['uk'];}
+// ===== ROLE AUTOCOMPLETE & CLOSEST-MATCH SYSTEM =====
+var ROLE_LABELS=[
+  {key:'nurse',label:'Nurse (RN)',keywords:['nurse','rn','nursing','medical assistant','caregiver']},
+  {key:'doctor',label:'Doctor / Physician',keywords:['doctor','physician','medic','md','gp','surgeon']},
+  {key:'pharmacist',label:'Pharmacist',keywords:['pharmacist','pharmacy','chemist']},
+  {key:'dentist',label:'Dentist',keywords:['dentist','dental','orthodontist']},
+  {key:'physiotherapist',label:'Physiotherapist',keywords:['physiotherapist','physio','physical therapist','therapist']},
+  {key:'software_engineer',label:'Software Engineer',keywords:['software engineer','developer','programmer','coder','full stack','frontend','backend','web developer','mobile developer','android','ios','swe']},
+  {key:'data_scientist',label:'Data Scientist',keywords:['data scientist','data science','ml engineer','machine learning','ai engineer','data analyst']},
+  {key:'product_manager',label:'Product Manager',keywords:['product manager','pm','product owner','product lead']},
+  {key:'ux_designer',label:'UX Designer',keywords:['ux','ui','designer','user experience','user interface','product designer','interaction designer']},
+  {key:'devops',label:'DevOps Engineer',keywords:['devops','sre','site reliability','cloud engineer','infrastructure','platform engineer']},
+  {key:'cybersecurity',label:'Cybersecurity Analyst',keywords:['cybersecurity','security','infosec','penetration tester','pentest','soc analyst','security analyst']},
+  {key:'accountant',label:'Accountant',keywords:['accountant','accounting','bookkeeper','cpa','auditor']},
+  {key:'financial_analyst',label:'Financial Analyst',keywords:['financial analyst','finance','investment','banker','analyst']},
+  {key:'marketing_manager',label:'Marketing Manager',keywords:['marketing','digital marketing','content marketing','seo','social media manager','brand manager']},
+  {key:'hr_manager',label:'HR Manager',keywords:['hr','human resources','recruiter','talent','people operations']},
+  {key:'sales_manager',label:'Sales Manager',keywords:['sales','account executive','business development','sales rep','bdr','sdr']},
+  {key:'project_manager',label:'Project Manager',keywords:['project manager','program manager','scrum master','agile coach']},
+  {key:'teacher',label:'Teacher',keywords:['teacher','tutor','educator','instructor','school teacher','english teacher','math teacher']},
+  {key:'university_lecturer',label:'University Lecturer',keywords:['lecturer','professor','academic','researcher','phd','postdoc']},
+  {key:'electrician',label:'Electrician',keywords:['electrician','electrical','wiring']},
+  {key:'plumber',label:'Plumber',keywords:['plumber','plumbing','pipefitter']},
+  {key:'chef',label:'Chef / Cook',keywords:['chef','cook','culinary','baker','pastry','kitchen','line cook']},
+  {key:'driver',label:'Truck / HGV Driver',keywords:['driver','truck driver','hgv','lorry','delivery driver','uber driver','taxi','chauffeur']},
+  {key:'warehouse',label:'Warehouse Operative',keywords:['warehouse','forklift','picker','packer','logistics worker']},
+  {key:'graphic_designer',label:'Graphic Designer',keywords:['graphic designer','illustrator','visual designer','print designer','brand designer']},
+  {key:'journalist',label:'Journalist / Writer',keywords:['journalist','writer','reporter','editor','copywriter','content writer','blogger']},
+  {key:'architect',label:'Architect',keywords:['architect','architectural','designer building']},
+];
+
+function findRoleMatch(query){
+  if(!query)return null;
+  var q=query.toLowerCase().trim();
+  // Pass 1: exact label match
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    if(ROLE_LABELS[i].label.toLowerCase()===q)return{role:ROLE_LABELS[i],exact:true};
+  }
+  // Pass 2: keyword exact match
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    for(var j=0;j<ROLE_LABELS[i].keywords.length;j++){
+      if(ROLE_LABELS[i].keywords[j]===q)return{role:ROLE_LABELS[i],exact:true};
+    }
+  }
+  // Pass 3: substring match in keywords
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    for(var j=0;j<ROLE_LABELS[i].keywords.length;j++){
+      if(ROLE_LABELS[i].keywords[j].indexOf(q)!==-1||q.indexOf(ROLE_LABELS[i].keywords[j])!==-1){
+        return{role:ROLE_LABELS[i],exact:false};
+      }
+    }
+  }
+  // Pass 4: substring match in label
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    if(ROLE_LABELS[i].label.toLowerCase().indexOf(q)!==-1)return{role:ROLE_LABELS[i],exact:false};
+  }
+  // Pass 5: word-overlap fallback
+  var qWords=q.split(/\s+/);
+  var bestScore=0,bestRole=null;
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    var allText=(ROLE_LABELS[i].label+' '+ROLE_LABELS[i].keywords.join(' ')).toLowerCase();
+    var score=0;
+    for(var k=0;k<qWords.length;k++){
+      if(qWords[k].length>=3&&allText.indexOf(qWords[k])!==-1)score++;
+    }
+    if(score>bestScore){bestScore=score;bestRole=ROLE_LABELS[i];}
+  }
+  if(bestRole)return{role:bestRole,exact:false};
+  // Pass 6: ultimate fallback — first letter category guess (very loose)
+  return{role:ROLE_LABELS[0],exact:false};
+}
+
+function getSuggestions(query){
+  if(!query)return ROLE_LABELS.slice(0,8);
+  var q=query.toLowerCase().trim();
+  var matches=[];
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    var r=ROLE_LABELS[i];
+    var allText=(r.label+' '+r.keywords.join(' ')).toLowerCase();
+    if(allText.indexOf(q)!==-1)matches.push(r);
+  }
+  return matches.slice(0,8);
+}
+
+var suggestActiveIndex=-1;
+
+function renderSuggestions(query){
+  var box=document.getElementById('role-suggestions');
+  var sugs=getSuggestions(query);
+  suggestActiveIndex=-1;
+  if(sugs.length===0){
+    box.innerHTML='<div class="role-suggestion-empty">No exact match — we\'ll show closest data when you search</div>';
+  }else{
+    box.innerHTML=sugs.map(function(r,i){
+      return '<div class="role-suggestion" data-key="'+r.key+'" data-label="'+r.label+'">'+r.label+'</div>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.role-suggestion'),function(el){
+      el.addEventListener('click',function(){
+        document.getElementById('role-text').value=el.dataset.label;
+        document.getElementById('role').value=el.dataset.key;
+        box.classList.remove('show');
+      });
+    });
+  }
+  box.classList.add('show');
+}
+
+(function initRoleInput(){
+  var input=document.getElementById('role-text');
+  var box=document.getElementById('role-suggestions');
+  if(!input)return;
+  input.addEventListener('focus',function(){renderSuggestions(input.value);});
+  input.addEventListener('input',function(){
+    document.getElementById('role').value='';
+    renderSuggestions(input.value);
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.role-input-wrap'))box.classList.remove('show');
+  });
+})();
+
 function runCheck(){
-  var role=document.getElementById('role').value;
+  var roleText=(document.getElementById('role-text').value||'').trim();
+  var roleHidden=document.getElementById('role').value;
   var country=document.getElementById('country').value;
   var exp=document.getElementById('exp').value;
   var cur=document.getElementById('currency').value;
-  if(!role||!country){alert('Please select a job role and country.');return;}
+
+  if(!roleText||!country){alert('Please type a job role and select a country.');return;}
+
+  var role=roleHidden;
+  var matchInfo=null;
+  var typedLabel=roleText;
+
+  if(!role){
+    matchInfo=findRoleMatch(roleText);
+    if(matchInfo){role=matchInfo.role.key;}
+  }
+  if(!role){alert('Sorry, we could not find a close match. Please try a different term.');return;}
+
   var base=get(role,country);if(!base)return;
   var m=EM[exp]||1;
   var low=Math.round(base[0]*m),med=Math.round(base[1]*m),high=Math.round(base[2]*m);
@@ -421,11 +543,26 @@ function runCheck(){
       '<div class="c-bar"><div class="c-track"><div class="c-fill" style="width:'+p+'%"></div></div></div>'+
       '<span class="c-sal">'+fmt(sals[i],cur)+'</span></div>';
   }).join('');
+  // Show match banner if needed
+  var banner=document.getElementById('match-banner');
+  if(matchInfo&&!matchInfo.exact){
+    banner.innerHTML='We don\'t have specific salary data for "<strong>'+typedLabel+'</strong>" yet. Showing closest match: <strong>'+matchInfo.role.label+'</strong>.';
+    banner.classList.add('show');
+  }else{
+    banner.classList.remove('show');
+  }
   document.getElementById('results').classList.add('show');
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function quick(r,c){
   document.getElementById('role').value=r;
+  // Also update the text input to show the label
+  for(var i=0;i<ROLE_LABELS.length;i++){
+    if(ROLE_LABELS[i].key===r){
+      document.getElementById('role-text').value=ROLE_LABELS[i].label;
+      break;
+    }
+  }
   document.getElementById('country').value=c;
   runCheck();
   document.querySelector('.checker').scrollIntoView({behavior:'smooth'});
