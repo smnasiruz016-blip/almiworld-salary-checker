@@ -149,6 +149,64 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:2rem
 footer a{color:var(--muted);text-decoration:none;margin:0 0.6rem;}
 footer a:hover{color:var(--text);}
 footer strong{color:var(--text);}
+
+/* NEWSLETTER STRIP */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;padding:0;margin:-1px;}
+.honeypot{position:absolute;left:-9999px;width:0;height:0;visibility:hidden;}
+.newsletter-strip{padding:48px 24px;background:var(--surface2);}
+.newsletter-inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;}
+.newsletter-copy h2{font-size:clamp(1.25rem,3vw,1.75rem);font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.newsletter-copy p{color:var(--muted);font-size:0.95rem;margin-top:4px;max-width:520px;}
+.newsletter-form{display:flex;gap:8px;width:100%;max-width:480px;}
+.newsletter-form input[type="email"]{flex:1;min-width:0;padding:12px 16px;border:1px solid var(--border);border-radius:999px;background:var(--bg);font:15px 'Outfit',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.newsletter-form input[type="email"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent);}
+.newsletter-form button[type="submit"]{padding:12px 24px;background:var(--accent);color:#FFFFFF;border:none;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:800;font-size:0.95rem;cursor:pointer;min-height:48px;transition:filter 0.2s;flex-shrink:0;}
+.newsletter-form button[type="submit"]:hover:not(:disabled){filter:brightness(0.95);}
+.newsletter-form button[type="submit"]:disabled{opacity:0.6;cursor:not-allowed;}
+.newsletter-success{color:var(--text);font-weight:700;font-size:0.95rem;}
+.newsletter-error{color:var(--accent);font-weight:600;font-size:0.9rem;}
+@media (max-width:540px){
+  .newsletter-form{flex-direction:column;}
+  .newsletter-strip{padding:40px 20px;}
+}
+
+/* REVIEW STRIP + DIALOG */
+.review-strip{padding:32px 24px;background:var(--bg);}
+.review-inner{max-width:720px;margin:0 auto;}
+.review-trigger{width:100%;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;font-family:inherit;color:inherit;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;}
+.review-trigger:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 8px 24px rgba(45,27,61,0.06);}
+.review-trigger-icon{width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--accent) 12%,transparent);display:grid;place-items:center;color:var(--accent);font-size:1.25rem;font-weight:700;flex-shrink:0;}
+.review-trigger-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.review-trigger-text strong{color:var(--text);font-weight:700;font-size:0.95rem;}
+.review-trigger-text span{color:var(--muted);font-size:0.825rem;}
+.review-trigger-arrow{color:var(--accent);font-weight:700;flex-shrink:0;font-size:1.1rem;}
+dialog#review-dialog{padding:0;border:none;border-radius:var(--radius);max-width:520px;width:calc(100vw - 32px);background:var(--surface);color:var(--text);box-shadow:0 24px 80px rgba(45,27,61,0.25);}
+dialog#review-dialog::backdrop{background:rgba(45,27,61,0.6);backdrop-filter:blur(4px);}
+#review-form{padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;}
+#review-form h3{font-weight:800;font-size:1.25rem;color:var(--text);padding-right:32px;}
+.review-dialog-sub{color:var(--muted);font-size:0.875rem;margin-top:-4px;margin-bottom:8px;}
+#review-form label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+#review-form input[type="text"],#review-form textarea{padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font:15px 'Outfit',sans-serif;color:var(--text);width:100%;box-sizing:border-box;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+#review-form input[type="text"]:focus,#review-form textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent);}
+#review-form textarea{resize:vertical;min-height:80px;font-family:'Outfit',sans-serif;}
+.rating-group{border:none;padding:0;margin:0;display:flex;gap:4px;justify-content:flex-start;}
+.star-label{cursor:pointer;padding:4px;position:relative;line-height:1;}
+.star-label input[type="radio"]{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;}
+.star-label span[aria-hidden]{font-size:1.75rem;color:var(--border);transition:color 0.15s;line-height:1;display:inline-block;}
+.star-label.filled span[aria-hidden]{color:var(--gold);}
+.star-label input[type="radio"]:focus-visible + span[aria-hidden]{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+.review-dialog-close{position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.25rem;color:var(--muted);cursor:pointer;padding:8px;border-radius:8px;line-height:1;transition:background 0.15s,color 0.15s;}
+.review-dialog-close:hover{background:var(--surface2);color:var(--text);}
+.review-submit{background:var(--accent);color:#FFFFFF;padding:12px 20px;border:none;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:800;font-size:0.95rem;cursor:pointer;min-height:48px;margin-top:8px;transition:filter 0.2s;}
+.review-submit:hover:not(:disabled){filter:brightness(0.95);}
+.review-submit:disabled{opacity:0.6;cursor:not-allowed;}
+.review-error{color:var(--accent);font-weight:600;font-size:0.875rem;}
+.review-success{padding:32px 24px;text-align:center;}
+.review-success h3{font-weight:800;font-size:1.25rem;color:var(--text);margin-bottom:8px;}
+.review-success p{color:var(--muted);font-size:0.95rem;margin-bottom:16px;}
+.review-success-close{background:var(--accent);color:#FFFFFF;padding:10px 24px;border:none;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:800;cursor:pointer;min-height:44px;}
+.char-count{color:var(--muted);font-weight:400;font-size:0.7rem;text-transform:none;letter-spacing:0;}
+.optional{color:var(--muted);font-weight:400;font-size:0.7rem;text-transform:none;letter-spacing:0;}
 </style>
 </head>
 <body>
@@ -343,6 +401,75 @@ footer strong{color:var(--text);}
   <div class="info-card"><div class="info-icon">💡</div><h4>Plan your move</h4><p>See how much more you could earn by working abroad in your target country.</p></div>
   <div class="info-card"><div class="info-icon">💰</div><h4>Negotiate better</h4><p>Know your market value before your next interview. Never undersell yourself again.</p></div>
 </div>
+
+<section class="newsletter-strip" aria-labelledby="newsletter-title">
+  <div class="newsletter-inner">
+    <div class="newsletter-copy">
+      <h2 id="newsletter-title">Stay in the loop</h2>
+      <p>Be the first to know about new salary data, country expansions, and tools.</p>
+    </div>
+    <form class="newsletter-form" id="newsletter-form" novalidate>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+      <label for="newsletter-email" class="sr-only">Email address</label>
+      <input id="newsletter-email" type="email" required maxlength="254" placeholder="your@email.com" autocomplete="email">
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="newsletter-success" id="newsletter-success" hidden>Thanks! You're on the list.</p>
+    <p class="newsletter-error" id="newsletter-error" hidden role="alert"></p>
+  </div>
+</section>
+
+<section class="review-strip" aria-labelledby="review-title">
+  <div class="review-inner">
+    <h2 id="review-title" class="sr-only">Share your experience</h2>
+    <button type="button" class="review-trigger" id="review-trigger" aria-haspopup="dialog" aria-controls="review-dialog">
+      <div class="review-trigger-icon" aria-hidden="true">★</div>
+      <div class="review-trigger-text">
+        <strong>Share your experience</strong>
+        <span>Help us improve AlmiSalary. Your feedback shapes what we build next.</span>
+      </div>
+      <span class="review-trigger-arrow" aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+
+<dialog id="review-dialog" aria-labelledby="review-dialog-title">
+  <form id="review-form" method="dialog">
+    <button type="button" class="review-dialog-close" id="review-dialog-close" aria-label="Close">✕</button>
+    <h3 id="review-dialog-title">Share your experience</h3>
+    <p class="review-dialog-sub">Your feedback shapes what we build next.</p>
+
+    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+
+    <fieldset class="rating-group" role="radiogroup" aria-label="Rating">
+      <legend class="sr-only">Rating</legend>
+      <label class="star-label"><input type="radio" name="rating" value="1" required><span aria-hidden="true">★</span><span class="sr-only">1 star</span></label>
+      <label class="star-label"><input type="radio" name="rating" value="2"><span aria-hidden="true">★</span><span class="sr-only">2 stars</span></label>
+      <label class="star-label"><input type="radio" name="rating" value="3"><span aria-hidden="true">★</span><span class="sr-only">3 stars</span></label>
+      <label class="star-label"><input type="radio" name="rating" value="4"><span aria-hidden="true">★</span><span class="sr-only">4 stars</span></label>
+      <label class="star-label"><input type="radio" name="rating" value="5" checked><span aria-hidden="true">★</span><span class="sr-only">5 stars</span></label>
+    </fieldset>
+
+    <label for="review-name">Your name</label>
+    <input id="review-name" name="displayName" type="text" required maxlength="80" placeholder="How should we credit you?">
+
+    <label for="review-comment">Your review <span class="char-count" id="comment-count">0 / 2000</span></label>
+    <textarea id="review-comment" name="comment" required minlength="10" maxlength="2000" rows="4" placeholder="What did you check with AlmiSalary? What worked well?"></textarea>
+
+    <label for="review-improvement">What could we improve? <span class="optional">(optional)</span></label>
+    <textarea id="review-improvement" name="improvement" maxlength="2000" rows="3" placeholder="Optional — share ideas to make AlmiSalary better"></textarea>
+
+    <p class="review-error" id="review-error" hidden role="alert"></p>
+
+    <button type="submit" class="review-submit">Submit Review</button>
+  </form>
+
+  <div class="review-success" id="review-success" hidden>
+    <h3>JazakAllah khair!</h3>
+    <p>We read every review. Thank you for sharing your experience.</p>
+    <button type="button" class="review-success-close" id="review-success-close">Close</button>
+  </div>
+</dialog>
 
 <footer>
   <a href="https://almiworld.com" class="footer-logo" aria-label="AlmiWorld home">
@@ -567,6 +694,135 @@ function quick(r,c){
   runCheck();
   document.querySelector('.checker').scrollIntoView({behavior:'smooth'});
 }
+
+/* NEWSLETTER */
+(function(){
+  var f=document.getElementById('newsletter-form');
+  var ok=document.getElementById('newsletter-success');
+  var er=document.getElementById('newsletter-error');
+  if(!f) return;
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var fd=new FormData(f);
+    var email=(f.querySelector('input[type="email"]').value||'').toString();
+    var website=(fd.get('website')||'').toString();
+    var btn=f.querySelector('button[type="submit"]');
+    btn.disabled=true;
+    btn.textContent='Subscribing…';
+    er.hidden=true;
+    try{
+      var res=await fetch('https://almicv.almiworld.com/api/newsletter',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:email.trim(),source:'almisalary',website:website})
+      });
+      if(res.ok){
+        f.hidden=true;
+        ok.hidden=false;
+      }else{
+        var data=await res.json().catch(function(){return{};});
+        er.textContent=data.error||'Something went wrong. Please try again.';
+        er.hidden=false;
+        btn.disabled=false;
+        btn.textContent='Subscribe';
+      }
+    }catch(err){
+      er.textContent='Network error. Please check your connection and try again.';
+      er.hidden=false;
+      btn.disabled=false;
+      btn.textContent='Subscribe';
+    }
+  });
+})();
+
+/* REVIEW DIALOG */
+(function(){
+  var trigger=document.getElementById('review-trigger');
+  var dlg=document.getElementById('review-dialog');
+  var closeBtn=document.getElementById('review-dialog-close');
+  var form=document.getElementById('review-form');
+  var er=document.getElementById('review-error');
+  var ok=document.getElementById('review-success');
+  var okClose=document.getElementById('review-success-close');
+  var cmt=document.getElementById('review-comment');
+  var cnt=document.getElementById('comment-count');
+  if(!trigger||!dlg||!form) return;
+
+  function updateStars(){
+    var checked=document.querySelector('.rating-group input[type="radio"]:checked');
+    var val=checked?parseInt(checked.value,10):0;
+    var labels=document.querySelectorAll('.rating-group .star-label');
+    for(var i=0;i<labels.length;i++){
+      if(i<val) labels[i].classList.add('filled');
+      else labels[i].classList.remove('filled');
+    }
+  }
+  var radios=document.querySelectorAll('.rating-group input[type="radio"]');
+  for(var i=0;i<radios.length;i++) radios[i].addEventListener('change',updateStars);
+  updateStars();
+
+  trigger.addEventListener('click',function(){
+    if(typeof dlg.showModal==='function') dlg.showModal();
+    else dlg.setAttribute('open','');
+  });
+  closeBtn.addEventListener('click',function(){dlg.close();});
+  if(okClose) okClose.addEventListener('click',function(){dlg.close();});
+  dlg.addEventListener('click',function(e){
+    if(e.target===dlg) dlg.close();
+  });
+
+  if(cmt&&cnt){
+    cmt.addEventListener('input',function(){
+      cnt.textContent=cmt.value.length+' / 2000';
+    });
+  }
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var fd=new FormData(form);
+    var rating=parseInt(fd.get('rating'),10);
+    var comment=(fd.get('comment')||'').toString().trim();
+    var improvement=(fd.get('improvement')||'').toString().trim()||undefined;
+    var displayName=(fd.get('displayName')||'').toString().trim();
+    var website=(fd.get('website')||'').toString();
+    if(comment.length<10){
+      er.textContent='Please share at least 10 characters of feedback.';
+      er.hidden=false;
+      return;
+    }
+    if(!displayName){
+      er.textContent='Please enter your name.';
+      er.hidden=false;
+      return;
+    }
+    var btn=form.querySelector('.review-submit');
+    btn.disabled=true;
+    btn.textContent='Submitting…';
+    er.hidden=true;
+    try{
+      var res=await fetch('https://almicv.almiworld.com/api/public/reviews',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rating:rating,comment:comment,improvement:improvement,displayName:displayName,source:'almisalary',website:website})
+      });
+      if(res.ok){
+        form.hidden=true;
+        ok.hidden=false;
+      }else{
+        var data=await res.json().catch(function(){return{};});
+        er.textContent=data.error||'Something went wrong. Please try again.';
+        er.hidden=false;
+        btn.disabled=false;
+        btn.textContent='Submit Review';
+      }
+    }catch(err){
+      er.textContent='Network error. Please check your connection and try again.';
+      er.hidden=false;
+      btn.disabled=false;
+      btn.textContent='Submit Review';
+    }
+  });
+})();
 </script>
 </body>
 </html>
