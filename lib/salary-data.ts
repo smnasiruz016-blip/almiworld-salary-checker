@@ -15,7 +15,22 @@
  *   CL → COMPARE_LIST
  */
 
-export type Currency = "USD" | "GBP" | "EUR" | "AUD" | "CAD" | "AED" | "SGD" | "ISK";
+/**
+ * The 8 currencies on the first line are the original calculator
+ * dropdown set (see CURRENCY_OPTIONS — that array stays at 8 for
+ * UI reasons). The 20 currencies on the following lines were added
+ * in Phase 2B to fix §2.4 currency-honesty violations on the
+ * landing pages: every country in the data file now maps to its
+ * actual native currency in COUNTRY_CURRENCY.
+ *
+ * Rates and symbols are placeholders — Phase 2D replaces them with
+ * live FX.
+ */
+export type Currency =
+  | "USD" | "GBP" | "EUR" | "AUD" | "CAD" | "AED" | "SGD" | "ISK"
+  // §2.4 Phase 2B currency expansion
+  | "SAR" | "QAR" | "CHF" | "SEK" | "NOK" | "DKK" | "PLN" | "NZD" | "MXN" | "BRL"
+  | "JPY" | "KRW" | "INR" | "PKR" | "PHP" | "MYR" | "ZAR" | "NGN" | "KES" | "EGP";
 
 export type Experience = "entry" | "mid" | "senior";
 
@@ -260,10 +275,19 @@ export const ROLE_DISPLAY: Record<Role, string> = {
 
 export const CURRENCY_RATES: Record<Currency, number> = {
   USD: 1, GBP: 0.79, EUR: 0.92, AUD: 1.53, CAD: 1.36, AED: 3.67, SGD: 1.34, ISK: 138,
+  // Phase 2B — see Currency type comment. All approximate as of 2026.
+  SAR: 3.75, QAR: 3.64, CHF: 0.91, SEK: 10.5, NOK: 10.7, DKK: 6.85,
+  PLN: 4.0, NZD: 1.65, MXN: 17.0, BRL: 5.0,
+  JPY: 152, KRW: 1370, INR: 83, PKR: 280, PHP: 57, MYR: 4.7,
+  ZAR: 18.5, NGN: 1580, KES: 130, EGP: 49,
 };
 
 export const CURRENCY_SYMBOLS: Record<Currency, string> = {
   USD: "$", GBP: "£", EUR: "€", AUD: "A$", CAD: "C$", AED: "AED ", SGD: "S$", ISK: "kr ",
+  SAR: "SAR ", QAR: "QAR ", CHF: "CHF ", SEK: "kr ", NOK: "kr ", DKK: "kr ",
+  PLN: "zł ", NZD: "NZ$", MXN: "MX$", BRL: "R$",
+  JPY: "¥", KRW: "₩", INR: "₹", PKR: "₨ ", PHP: "₱", MYR: "RM ",
+  ZAR: "R ", NGN: "₦", KES: "KSh ", EGP: "E£ ",
 };
 
 export const DEMAND: Record<BaseRole, string> = {

@@ -77,7 +77,11 @@ export async function generateMetadata({
 }
 
 function fmt(amount: number, symbol: string): string {
-  return symbol + amount.toLocaleString();
+  // Pin to en-US so SSR output is deterministic regardless of build
+  // server locale (§2.4: a salary number must look the same to every
+  // reader, not "$55,000" or "$55.000" depending on where the build
+  // ran). Phase 2C may add per-country locale-aware formatting.
+  return symbol + amount.toLocaleString("en-US");
 }
 
 function Breadcrumb({ d }: { d: LandingPageData }) {
@@ -120,17 +124,17 @@ function SalaryRange({ d }: { d: LandingPageData }) {
         <div className="lp-range-cell">
           <div className="lp-range-label">Low</div>
           <div className="lp-range-native">{fmt(d.rangeNative.low, d.nativeSymbol)}</div>
-          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.low.toLocaleString()} USD</div>
+          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.low.toLocaleString("en-US")} USD</div>
         </div>
         <div className="lp-range-cell lp-range-cell-mid">
           <div className="lp-range-label">Mid</div>
           <div className="lp-range-native">{fmt(d.rangeNative.mid, d.nativeSymbol)}</div>
-          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.mid.toLocaleString()} USD</div>
+          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.mid.toLocaleString("en-US")} USD</div>
         </div>
         <div className="lp-range-cell">
           <div className="lp-range-label">High</div>
           <div className="lp-range-native">{fmt(d.rangeNative.high, d.nativeSymbol)}</div>
-          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.high.toLocaleString()} USD</div>
+          <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.high.toLocaleString("en-US")} USD</div>
         </div>
       </div>
       <p className="lp-range-meta">

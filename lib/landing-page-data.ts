@@ -39,43 +39,71 @@ import {
 } from "./page-relations";
 import { countryToSlug, roleToSlug } from "./page-slugs";
 
-/** Native currency per country. Where a country uses the same currency
- *  as another (Eurozone, USD-pegged), we keep the canonical mapping. */
+/**
+ * Native currency per country.
+ *
+ * §2.4 (currency honesty) requires we never silently present one
+ * country's compensation labelled in another country's currency.
+ * Every entry below is the country's actual ISO-4217 native currency.
+ *
+ * Worth noting in the EU-vs-Eurozone distinction:
+ *   - Eurozone members → EUR (Germany, France, Netherlands, Ireland,
+ *     Spain, Italy, Portugal)
+ *   - In EU but NOT Eurozone → native currency (Poland → PLN,
+ *     Sweden → SEK, Denmark → DKK)
+ *   - Not in EU at all → native currency (UK → GBP, Switzerland → CHF,
+ *     Norway → NOK, Iceland → ISK)
+ *
+ * Rates that turn these USD figures into native amounts live in
+ * `CURRENCY_RATES` in salary-data.ts. All non-original-8 rates are
+ * placeholders awaiting Phase 2D's live FX integration.
+ */
 export const COUNTRY_CURRENCY: Record<Country, Currency> = {
+  // British Isles
   uk: "GBP",
   ireland: "EUR",
+  // Eurozone Western & Southern Europe
   germany: "EUR",
   france: "EUR",
   netherlands: "EUR",
   spain: "EUR",
   italy: "EUR",
   portugal: "EUR",
-  poland: "EUR",
-  switzerland: "EUR",
-  sweden: "EUR",
-  norway: "EUR",
-  denmark: "EUR",
+  // EU but not Eurozone
+  poland: "PLN",
+  sweden: "SEK",
+  denmark: "DKK",
+  // Non-EU Europe
+  switzerland: "CHF",
+  norway: "NOK",
   iceland: "ISK",
+  // Americas
   usa: "USD",
   canada: "CAD",
-  mexico: "USD",
-  brazil: "USD",
+  mexico: "MXN",
+  brazil: "BRL",
+  // Oceania
   australia: "AUD",
-  new_zealand: "AUD",
+  new_zealand: "NZD",
+  // Gulf — Riyals are USD-pegged but accounted in their own currency on payslips
   uae: "AED",
-  saudi: "AED",
-  qatar: "AED",
+  saudi: "SAR",
+  qatar: "QAR",
+  // South-East Asia
   singapore: "SGD",
-  malaysia: "USD",
-  philippines: "USD",
-  india: "USD",
-  pakistan: "USD",
-  japan: "USD",
-  south_korea: "USD",
-  south_africa: "USD",
-  nigeria: "USD",
-  kenya: "USD",
-  egypt: "USD",
+  malaysia: "MYR",
+  philippines: "PHP",
+  // South Asia
+  india: "INR",
+  pakistan: "PKR",
+  // East Asia
+  japan: "JPY",
+  south_korea: "KRW",
+  // Africa
+  south_africa: "ZAR",
+  nigeria: "NGN",
+  kenya: "KES",
+  egypt: "EGP",
 };
 
 const LAST_REVIEWED = "2026";
