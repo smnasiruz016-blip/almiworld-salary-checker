@@ -10,15 +10,16 @@ export default function HomePage() {
       <SiteNav />
 
       <div className="hero">
-        <div className="hero-badge">🌍 Free · No signup · 50+ Countries</div>
+        <div className="hero-badge">Free · No signup · 50+ countries</div>
         <h1>
-          What Should You
+          What you should
           <br />
-          Earn <em>Worldwide?</em>
+          <em>actually</em> be paid
         </h1>
         <p>
-          Real salary data for 100+ job roles across 50+ countries. Know your worth
-          before your next interview.
+          Honest salary ranges across 50+ countries and 100+ roles. Including the
+          parts most calculators skip — housing allowances, end-of-service bonuses,
+          and what the same job pays when you do it abroad instead of at home.
         </p>
         <div className="hero-note">Updated 2026 · Based on government &amp; industry data</div>
       </div>
@@ -38,13 +39,12 @@ export default function HomePage() {
         </div>
         <div className="info-card">
           <div className="info-icon">💡</div>
-          <h4>Plan your move</h4>
-          <p>See how much more you could earn by working abroad in your target country.</p>
-        </div>
-        <div className="info-card">
-          <div className="info-icon">💰</div>
-          <h4>Negotiate better</h4>
-          <p>Know your market value before your next interview. Never undersell yourself again.</p>
+          <h4>Built for migrating professionals too</h4>
+          <p>
+            Whether you&apos;re a nurse in Manila considering Riyadh, an engineer in
+            Lahore looking at Manchester, or an accountant already working in Dubai
+            — the numbers should be honest. Same data, your reality.
+          </p>
         </div>
       </div>
 

@@ -305,7 +305,7 @@ export function SalaryCalculator() {
               className="check-btn"
               onClick={() => runCheck()}
             >
-              💰 Check Salary Now — Free
+              Check salary
             </button>
           </div>
 
