@@ -26,6 +26,7 @@ export function SiteNav() {
         <a href="https://almijob.almiworld.com">Job Finder</a>
         <a href="https://almicv.almiworld.com">CV Builder</a>
         <a href="https://almicv.almiworld.com/resume-score">ATS Checker</a>
+        <a href="https://almistudy.almiworld.com">Universities</a>
         <a href="https://almiworld.com/ebooks-2/">eBooks</a>
         <a href="https://almijob.almiworld.com" className="nav-cta">
           Find Jobs →
