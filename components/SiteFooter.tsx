@@ -29,6 +29,7 @@ export function SiteFooter() {
         <a href="https://almijob.almiworld.com">Job Finder</a>
         <a href="https://almicv.almiworld.com">CV Builder</a>
         <a href="https://almicv.almiworld.com/resume-score">ATS Checker</a>
+        <a href="https://almistudy.almiworld.com">Universities</a>
         <a href="https://almiworld.com/ebooks-2/">eBooks</a>
       </p>
       <p style={{ marginTop: "0.6rem", fontSize: "0.7rem", opacity: 0.5 }}>
