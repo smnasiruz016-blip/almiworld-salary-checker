@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
 import {
   COMPARE_LIST,
   COUNTRY_FLAGS,
@@ -74,6 +75,14 @@ const POPULAR: ReadonlyArray<{ role: Role; country: Country; label: string }> = 
 ];
 
 export function SalaryCalculator() {
+  return (
+    <Suspense fallback={null}>
+      <SalaryCalculatorInner />
+    </Suspense>
+  );
+}
+
+function SalaryCalculatorInner() {
   const [roleText, setRoleText] = useState("");
   const [roleHidden, setRoleHidden] = useState<Role | "">("");
   const [country, setCountry] = useState<Country | "">("");
@@ -88,6 +97,36 @@ export function SalaryCalculator() {
   const roleWrapRef = useRef<HTMLDivElement | null>(null);
   const checkerRef = useRef<HTMLDivElement | null>(null);
   const resultsRef = useRef<HTMLDivElement | null>(null);
+
+  // Deep-link pre-fill from the static /salary/[country]/[role] pages.
+  // When `?role=` and `?country=` are present (both must validate
+  // against the existing label sets), pre-select the form and trigger
+  // a calculation so the user lands on results, not an empty form.
+  // Absent params → no-op, calculator behaves exactly as before.
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const r = searchParams.get("role");
+    const c = searchParams.get("country");
+    if (!r || !c) return;
+    const roleLabel = ROLE_LABELS.find((rl) => rl.key === r);
+    const countryName = (COUNTRY_NAMES as Record<string, string>)[c];
+    if (!roleLabel || !countryName) return;
+    setRoleHidden(roleLabel.key);
+    setRoleText(roleLabel.label);
+    setCountry(c as Country);
+    // runCheck reads current state; pass overrides because setState
+    // updates are batched and haven't flushed by the time we call it.
+    runCheck({
+      roleOverride: roleLabel.key,
+      countryOverride: c as Country,
+      labelOverride: roleLabel.label,
+    });
+    // Scroll to results so the user sees the pre-filled answer.
+    requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Click-outside handler closes the suggestions box, mirroring the
   // legacy `document.addEventListener('click', ...)` behavior.

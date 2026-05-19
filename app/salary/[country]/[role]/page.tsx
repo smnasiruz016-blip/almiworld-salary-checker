@@ -91,7 +91,10 @@ function Breadcrumb({ d }: { d: LandingPageData }) {
       <span aria-hidden="true">›</span>
       <span>Salary</span>
       <span aria-hidden="true">›</span>
-      <span>{d.countryName}</span>
+      <span>
+        <span aria-hidden="true">{d.countryFlag} </span>
+        {d.countryName}
+      </span>
       <span aria-hidden="true">›</span>
       <span aria-current="page">{d.roleDisplay}</span>
     </nav>
@@ -137,10 +140,91 @@ function SalaryRange({ d }: { d: LandingPageData }) {
           <div className="lp-range-usd">≈ ${d.rangeUsdDisplay.high.toLocaleString("en-US")} USD</div>
         </div>
       </div>
+      <table className="lp-bands">
+        <caption className="lp-bands-caption">By experience level</caption>
+        <thead>
+          <tr>
+            <th scope="col">Level</th>
+            <th scope="col">Low</th>
+            <th scope="col">Mid</th>
+            <th scope="col">High</th>
+          </tr>
+        </thead>
+        <tbody>
+          {d.experienceBands.map((b) => (
+            <tr key={b.level} className={b.level === "mid" ? "lp-bands-row-current" : undefined}>
+              <th scope="row">{b.label}</th>
+              <td>{fmt(b.low, d.nativeSymbol)}</td>
+              <td>{fmt(b.mid, d.nativeSymbol)}</td>
+              <td>{fmt(b.high, d.nativeSymbol)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <p className="lp-range-meta">
         <span>Source: {d.sourceLabel}</span>
         <span>Last reviewed: {d.lastReviewed}</span>
       </p>
+    </section>
+  );
+}
+
+function CompareChart({ d }: { d: LandingPageData }) {
+  if (d.compareRows.length === 0) return null;
+  const max = Math.max(...d.compareRows.map((r) => r.midUsd));
+  return (
+    <section className="lp-section" aria-labelledby="lp-compare-title">
+      <h2 id="lp-compare-title" className="lp-section-title">
+        How this role pays globally
+      </h2>
+      <p className="lp-prose-faint">
+        Mid-band annual salary in USD across a curated set of comparable
+        markets. Values are real measurements from{" "}
+        {d.closestMatch && d.closestMatchBaseRoleDisplay
+          ? d.closestMatchBaseRoleDisplay + " "
+          : ""}
+        salary data — same numbers shown on each country&apos;s own page.
+      </p>
+      <ul className="lp-compare">
+        {d.compareRows.map((r) => {
+          const pct = Math.max(4, Math.round((r.midUsd / max) * 100));
+          return (
+            <li key={r.country} className={`lp-compare-row${r.isYou ? " lp-compare-row-you" : ""}`}>
+              <Link href={r.href} className="lp-compare-link">
+                <span className="lp-compare-name">
+                  <span aria-hidden="true">{r.flag}</span> {r.name}
+                  {r.isYou && <span className="lp-compare-you-tag"> (you)</span>}
+                </span>
+                <span className="lp-compare-bar" aria-hidden="true">
+                  <span className="lp-compare-bar-fill" style={{ width: pct + "%" }} />
+                </span>
+                <span className="lp-compare-value">
+                  ${r.midUsd.toLocaleString("en-US")}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+function OpenCalculatorCta({ d }: { d: LandingPageData }) {
+  return (
+    <section className="lp-calc-cta" aria-labelledby="lp-calc-cta-title">
+      <div>
+        <p id="lp-calc-cta-title" className="lp-calc-cta-title">
+          Adjust by your city, experience and currency
+        </p>
+        <p className="lp-calc-cta-sub">
+          Open the interactive Salary Checker pre-filled for{" "}
+          <strong>{d.roleDisplay}</strong> in <strong>{d.countryName}</strong>.
+        </p>
+      </div>
+      <Link href={d.calculatorHref} className="lp-calc-cta-button">
+        Open Salary Checker →
+      </Link>
     </section>
   );
 }
@@ -203,6 +287,7 @@ function NearbyCountries({ d }: { d: LandingPageData }) {
         {d.nearbyCountryLinks.map((l) => (
           <li key={l.country}>
             <Link href={l.href}>
+              <span aria-hidden="true">{l.flag} </span>
               {d.roleDisplay} in {l.name}
             </Link>
           </li>
@@ -301,16 +386,25 @@ export default async function LandingPage({
         <Breadcrumb d={d} />
         <header className="lp-header">
           <h1 className="lp-h1">
+            <span aria-hidden="true">{d.countryFlag} </span>
             {d.roleDisplay} salary in {d.countryName}
           </h1>
           <p className="lp-subhead">{subhead}</p>
+          {d.roleAlsoCalled.length > 0 && (
+            <p className="lp-also-called">
+              Also called: {d.roleAlsoCalled.join(" · ")}
+            </p>
+          )}
           <p className="lp-hero-note">
-            Updated {d.lastReviewed} · Based on government &amp; industry data
+            Updated {d.lastReviewed} · Demand: {d.demand} · 5-yr trend:{" "}
+            {d.trend} · Based on government &amp; industry data
           </p>
         </header>
         <ClosestMatchBanner d={d} />
         <SalaryRange d={d} />
+        <OpenCalculatorCta d={d} />
         <CompensationBreakdown d={d} />
+        <CompareChart d={d} />
         <NearbyCountries d={d} />
         <RelatedRoles d={d} />
         <CrossProductCta d={d} />

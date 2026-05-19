@@ -17,14 +17,22 @@
  */
 
 import {
+  COMPARE_LIST,
+  COUNTRY_FLAGS,
   COUNTRY_NAMES,
   CURRENCY_RATES,
   CURRENCY_SYMBOLS,
+  DEMAND,
+  EXPERIENCE_LABELS,
+  EXPERIENCE_MODIFIERS,
   ROLE_ALIASES,
   ROLE_DISPLAY,
+  ROLE_LABELS,
   SALARY_DATA,
+  TREND,
   type Country,
   type Currency,
+  type Experience,
   type Role,
   type SalaryRange,
 } from "./salary-data";
@@ -146,10 +154,41 @@ export interface LandingPageData {
   /** §7.1 last-reviewed year. */
   lastReviewed: string;
 
+  /** Demand signal for the underlying base role (e.g. "Very High ↑").
+   *  Surfaced in the hero note. Already used by the interactive
+   *  calculator — exposing it here for parity. */
+  demand: string;
+  /** 5-year salary trend (e.g. "+12%"). Surfaced in the hero note. */
+  trend: string;
+  /** Country flag emoji — added to H1 + breadcrumb + nearby-country
+   *  links so the page reads at a glance. */
+  countryFlag: string;
+  /** Synonym keywords for this role (e.g. ["RN", "nursing", "medical
+   *  assistant"]). Excludes the canonical role display name. Surfaced
+   *  as an "Also called:" line — pure long-tail SEO from real labels,
+   *  no fabrication. */
+  roleAlsoCalled: ReadonlyArray<string>;
+  /** Entry / mid / senior salary bands, derived by applying
+   *  EXPERIENCE_MODIFIERS (0.78 / 1.0 / 1.35) to the base USD range.
+   *  Native-currency figures rounded the same way the headline range
+   *  is rounded. Triples the range section's substance without
+   *  introducing any number that isn't already in the dataset. */
+  experienceBands: ReadonlyArray<{
+    level: Experience;
+    label: string;
+    low: number;
+    mid: number;
+    high: number;
+    lowUsd: number;
+    midUsd: number;
+    highUsd: number;
+  }>;
+
   /** Sister-pages: same role in nearby countries. */
   nearbyCountryLinks: ReadonlyArray<{
     country: Country;
     name: string;
+    flag: string;
     href: string;
   }>;
 
@@ -159,11 +198,51 @@ export interface LandingPageData {
     label: string;
     href: string;
   }>;
+
+  /** Curated peer countries for this base role (COMPARE_LIST), each
+   *  with its real SALARY_DATA mid value in USD. Drives the "How this
+   *  role pays globally" comparison chart. The current country is
+   *  flagged with `isYou` so it can be highlighted. All values are
+   *  the actual numbers from SALARY_DATA — no fabrication. */
+  compareRows: ReadonlyArray<{
+    country: Country;
+    name: string;
+    flag: string;
+    midUsd: number;
+    href: string;
+    isYou: boolean;
+  }>;
+
+  /** Pre-filled link into the interactive Salary Checker for this
+   *  role + country. The SalaryCalculator reads ?role= and ?country=
+   *  on mount and pre-selects + triggers calculation. With no params,
+   *  the calculator behaves exactly as before — this is purely
+   *  additive. */
+  calculatorHref: string;
 }
 
 function nativeFigure(usdAmount: number, currency: Currency): number {
   const rate = CURRENCY_RATES[currency] ?? 1;
   return Math.round(usdAmount * rate);
+}
+
+/** Synonym keywords for a role, excluding its canonical display name
+ *  (case-insensitive). Drives the "Also called:" line. Returns a
+ *  deduped, original-cased list. */
+function roleAlsoCalled(role: Role): readonly string[] {
+  const label = ROLE_LABELS.find((r) => r.key === role);
+  if (!label) return [];
+  const canonical = label.label.toLowerCase();
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const k of label.keywords) {
+    const norm = k.toLowerCase();
+    if (norm === canonical) continue;
+    if (seen.has(norm)) continue;
+    seen.add(norm);
+    out.push(k);
+  }
+  return out;
 }
 
 export function getLandingPageData(country: Country, role: Role): LandingPageData {
@@ -184,6 +263,28 @@ export function getLandingPageData(country: Country, role: Role): LandingPageDat
     high: range[2],
   };
 
+  // Experience bands: EXPERIENCE_MODIFIERS applied to the headline USD
+  // range, then converted to native currency. No new data — just
+  // surfacing modifiers that already exist for the interactive
+  // calculator (§2.x — show real fields, don't fabricate).
+  const experienceLevels: readonly Experience[] = ["entry", "mid", "senior"];
+  const experienceBands = experienceLevels.map((level) => {
+    const mod = EXPERIENCE_MODIFIERS[level];
+    const lowUsd = Math.round(range[0] * mod);
+    const midUsd = Math.round(range[1] * mod);
+    const highUsd = Math.round(range[2] * mod);
+    return {
+      level,
+      label: EXPERIENCE_LABELS[level],
+      low: nativeFigure(lowUsd, nativeCurrency),
+      mid: nativeFigure(midUsd, nativeCurrency),
+      high: nativeFigure(highUsd, nativeCurrency),
+      lowUsd,
+      midUsd,
+      highUsd,
+    };
+  });
+
   const sector = SECTOR_OF[role];
   const cta = SECTOR_CTA[sector];
 
@@ -193,6 +294,20 @@ export function getLandingPageData(country: Country, role: Role): LandingPageDat
 
   const nearby = getNearbyCountries(country, 4);
   const related = getRelatedRoles(role, 4);
+
+  // Compare chart uses COMPARE_LIST for the BASE role — the curated
+  // peer set the calculator uses. For alias roles we borrow the base
+  // role's set; the ClosestMatchBanner already discloses that the
+  // numbers are extrapolated.
+  const comparePeers = COMPARE_LIST[baseRole];
+  const compareRows = comparePeers.map((c) => ({
+    country: c,
+    name: COUNTRY_NAMES[c],
+    flag: COUNTRY_FLAGS[c],
+    midUsd: SALARY_DATA[baseRole][c][1],
+    href: `/salary/${countryToSlug(c)}/${roleToSlug(role)}`,
+    isYou: c === country,
+  }));
 
   return {
     country,
@@ -221,9 +336,16 @@ export function getLandingPageData(country: Country, role: Role): LandingPageDat
     sourceLabel,
     lastReviewed: LAST_REVIEWED,
 
+    demand: DEMAND[baseRole],
+    trend: TREND[baseRole],
+    countryFlag: COUNTRY_FLAGS[country],
+    roleAlsoCalled: roleAlsoCalled(role),
+    experienceBands,
+
     nearbyCountryLinks: nearby.map((c) => ({
       country: c,
       name: COUNTRY_NAMES[c],
+      flag: COUNTRY_FLAGS[c],
       href: `/salary/${countryToSlug(c)}/${roleToSlug(role)}`,
     })),
 
@@ -232,6 +354,10 @@ export function getLandingPageData(country: Country, role: Role): LandingPageDat
       label: ROLE_DISPLAY[r],
       href: `/salary/${countryToSlug(country)}/${roleToSlug(r)}`,
     })),
+
+    compareRows,
+
+    calculatorHref: `/?role=${role}&country=${country}&from=salary-page`,
   };
 }
 
