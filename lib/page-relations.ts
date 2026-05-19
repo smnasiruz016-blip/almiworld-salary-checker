@@ -66,6 +66,57 @@ export const SECTOR_OF: Record<Role, Sector> = {
   warehouse: "trades",
   // Hospitality / service
   chef: "service",
+  // Phase 2D — Healthcare expansion (13)
+  midwife: "healthcare",
+  paramedic: "healthcare",
+  radiographer: "healthcare",
+  dental_hygienist: "healthcare",
+  medical_assistant: "healthcare",
+  occupational_therapist: "healthcare",
+  speech_therapist: "healthcare",
+  veterinarian: "healthcare",
+  optometrist: "healthcare",
+  anesthetist: "healthcare",
+  surgeon: "healthcare",
+  psychiatrist: "healthcare",
+  pediatrician: "healthcare",
+  // Phase 2D — Tech expansion (9)
+  mobile_developer: "tech",
+  backend_engineer: "tech",
+  frontend_engineer: "tech",
+  cloud_architect: "tech",
+  site_reliability: "tech",
+  security_engineer: "tech",
+  ml_engineer: "tech",
+  ai_engineer: "tech",
+  data_engineer: "tech",
+  // Phase 2D — Business / Finance / Marketing expansion (9)
+  auditor: "business",
+  tax_consultant: "business",
+  credit_analyst: "business",
+  business_analyst: "business",
+  digital_marketer: "business",
+  seo_specialist: "business",
+  social_media_manager: "business",
+  pr_manager: "business",
+  brand_manager: "business",
+  // Phase 2D — Education expansion (4)
+  librarian: "education",
+  early_childhood_educator: "education",
+  esl_teacher: "education",
+  special_ed_teacher: "education",
+  // Phase 2D — Trades expansion (6)
+  hvac_technician: "trades",
+  bus_driver: "trades",
+  delivery_driver: "trades",
+  crane_operator: "trades",
+  forklift_operator: "trades",
+  shipping_clerk: "trades",
+  // Phase 2D — Service expansion (4)
+  baker: "service",
+  pastry_chef: "service",
+  sous_chef: "service",
+  head_chef: "service",
 };
 
 /**
