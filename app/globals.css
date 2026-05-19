@@ -253,3 +253,38 @@ dialog#review-dialog::backdrop { background: rgba(45, 27, 61, 0.6); backdrop-fil
 .lp-cta-text { color: var(--text); font-size: 0.95rem; line-height: 1.5; max-width: 480px; }
 .lp-cta-link { color: var(--accent); font-weight: 700; text-decoration: none; font-size: 0.95rem; transition: filter 0.15s; }
 .lp-cta-link:hover { filter: brightness(0.9); }
+
+/* Phase 2C — enrichment additions (experience bands, compare chart, calculator cross-link, also-called) */
+.lp-also-called { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-top: 0.4rem; }
+.lp-also-called::before { content: ""; }
+
+.lp-bands { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.85rem; }
+.lp-bands-caption { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; padding: 0.75rem 0 0.5rem; caption-side: top; }
+.lp-bands thead th { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; text-align: right; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); }
+.lp-bands thead th:first-child { text-align: left; }
+.lp-bands tbody th { text-align: left; font-weight: 600; color: var(--text); padding: 0.5rem 0.5rem; }
+.lp-bands tbody td { font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace; text-align: right; color: var(--text); padding: 0.5rem 0.5rem; }
+.lp-bands tbody tr + tr th, .lp-bands tbody tr + tr td { border-top: 1px solid var(--border); }
+.lp-bands-row-current th, .lp-bands-row-current td { color: var(--accent); font-weight: 700; }
+
+.lp-compare { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-direction: column; gap: 6px; }
+.lp-compare-row { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.15s, transform 0.15s; }
+.lp-compare-row:hover { border-color: var(--accent); transform: translateY(-1px); }
+.lp-compare-row-you { background: var(--surface2); border-color: rgba(255, 122, 107, 0.4); }
+.lp-compare-link { display: grid; grid-template-columns: minmax(160px, 1fr) 2fr minmax(90px, auto); align-items: center; gap: 12px; padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 0.9rem; }
+.lp-compare-name { font-weight: 600; }
+.lp-compare-you-tag { font-size: 0.72rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.lp-compare-bar { display: block; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.lp-compare-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--gold)); border-radius: 999px; }
+.lp-compare-row-you .lp-compare-bar-fill { background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.lp-compare-value { font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); text-align: right; }
+@media (max-width: 540px) {
+  .lp-compare-link { grid-template-columns: 1fr auto; grid-template-rows: auto auto; row-gap: 6px; }
+  .lp-compare-bar { grid-column: 1 / -1; order: 3; }
+}
+
+.lp-calc-cta { background: linear-gradient(135deg, var(--surface2), var(--surface)); border: 1px solid rgba(255, 122, 107, 0.4); border-left: 4px solid var(--accent); border-radius: 12px; padding: 1.1rem 1.4rem; margin: 1.5rem 0 1.75rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+.lp-calc-cta-title { color: var(--text); font-size: 1rem; font-weight: 700; margin: 0 0 0.25rem; }
+.lp-calc-cta-sub { color: var(--muted); font-size: 0.88rem; margin: 0; line-height: 1.45; }
+.lp-calc-cta-button { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 0.92rem; text-decoration: none; transition: filter 0.15s, transform 0.15s; white-space: nowrap; }
+.lp-calc-cta-button:hover { filter: brightness(0.93); transform: translateY(-1px); }
