@@ -48,10 +48,36 @@ export type BaseRole =
   | "electrician" | "chef" | "data_scientist" | "marketing_manager" | "driver";
 
 export type AliasRole =
+  // Phase 2B — original alias roles
   | "pharmacist" | "dentist" | "physiotherapist" | "product_manager"
   | "ux_designer" | "devops" | "cybersecurity" | "financial_analyst"
   | "hr_manager" | "sales_manager" | "project_manager" | "university_lecturer"
-  | "plumber" | "warehouse" | "graphic_designer" | "journalist" | "architect";
+  | "plumber" | "warehouse" | "graphic_designer" | "journalist" | "architect"
+  // Phase 2D — 45 expansion aliases. Each maps to a BaseRole (never
+  // to another AliasRole — resolveBaseRole does single-level lookup).
+  // Stretched mappings (mason→electrician class) intentionally
+  // OMITTED — held for a future "needs real data" backlog.
+  // Healthcare → nurse / doctor (13)
+  | "midwife" | "paramedic" | "radiographer" | "dental_hygienist"
+  | "medical_assistant" | "occupational_therapist" | "speech_therapist"
+  | "veterinarian" | "optometrist" | "anesthetist" | "surgeon"
+  | "psychiatrist" | "pediatrician"
+  // Tech → software_engineer / data_scientist (9)
+  | "mobile_developer" | "backend_engineer" | "frontend_engineer"
+  | "cloud_architect" | "site_reliability" | "security_engineer"
+  | "ml_engineer" | "ai_engineer" | "data_engineer"
+  // Business / Finance / Marketing → accountant / marketing_manager (9)
+  | "auditor" | "tax_consultant" | "credit_analyst" | "business_analyst"
+  | "digital_marketer" | "seo_specialist" | "social_media_manager"
+  | "pr_manager" | "brand_manager"
+  // Education → teacher (4)
+  | "librarian" | "early_childhood_educator" | "esl_teacher"
+  | "special_ed_teacher"
+  // Trades → electrician / driver (6)
+  | "hvac_technician" | "bus_driver" | "delivery_driver" | "crane_operator"
+  | "forklift_operator" | "shipping_clerk"
+  // Service → chef (4)
+  | "baker" | "pastry_chef" | "sous_chef" | "head_chef";
 
 export type Role = BaseRole | AliasRole;
 
@@ -202,6 +228,7 @@ export const SALARY_DATA: Record<BaseRole, Record<Country, SalaryRange>> = {
 };
 
 export const ROLE_ALIASES: Record<AliasRole, BaseRole> = {
+  // Original Phase 2B aliases
   pharmacist: "accountant",
   dentist: "doctor",
   physiotherapist: "nurse",
@@ -219,6 +246,63 @@ export const ROLE_ALIASES: Record<AliasRole, BaseRole> = {
   graphic_designer: "marketing_manager",
   journalist: "teacher",
   architect: "data_scientist",
+  // Phase 2D — Healthcare → nurse (allied health professional band)
+  midwife: "nurse",
+  paramedic: "nurse",
+  radiographer: "nurse",
+  dental_hygienist: "nurse",
+  medical_assistant: "nurse",
+  occupational_therapist: "nurse",
+  speech_therapist: "nurse",
+  // Phase 2D — Healthcare → doctor (specialist physician roles)
+  veterinarian: "doctor",
+  optometrist: "doctor",
+  anesthetist: "doctor",
+  surgeon: "doctor",
+  psychiatrist: "doctor",
+  pediatrician: "doctor",
+  // Phase 2D — Tech → software_engineer (engineering roles in the
+  // same compensation band; SRE/cloud/security all overlap with SWE
+  // pay since BaseRole devops + cybersecurity already do)
+  mobile_developer: "software_engineer",
+  backend_engineer: "software_engineer",
+  frontend_engineer: "software_engineer",
+  cloud_architect: "software_engineer",
+  site_reliability: "software_engineer",
+  security_engineer: "software_engineer",
+  // Phase 2D — Tech → data_scientist (ML/AI/data adjacent)
+  ml_engineer: "data_scientist",
+  ai_engineer: "data_scientist",
+  data_engineer: "data_scientist",
+  // Phase 2D — Business / Finance → accountant
+  auditor: "accountant",
+  tax_consultant: "accountant",
+  credit_analyst: "accountant",
+  business_analyst: "accountant",
+  // Phase 2D — Marketing → marketing_manager
+  digital_marketer: "marketing_manager",
+  seo_specialist: "marketing_manager",
+  social_media_manager: "marketing_manager",
+  pr_manager: "marketing_manager",
+  brand_manager: "marketing_manager",
+  // Phase 2D — Education → teacher
+  librarian: "teacher",
+  early_childhood_educator: "teacher",
+  esl_teacher: "teacher",
+  special_ed_teacher: "teacher",
+  // Phase 2D — Trades → electrician (close-band skilled trade)
+  hvac_technician: "electrician",
+  // Phase 2D — Trades → driver (commercial vehicle / logistics)
+  bus_driver: "driver",
+  delivery_driver: "driver",
+  crane_operator: "driver",
+  forklift_operator: "driver",
+  shipping_clerk: "driver",
+  // Phase 2D — Service → chef (kitchen brigade roles)
+  baker: "chef",
+  pastry_chef: "chef",
+  sous_chef: "chef",
+  head_chef: "chef",
 };
 
 export const COUNTRY_NAMES: Record<Country, string> = {
@@ -271,6 +355,58 @@ export const ROLE_DISPLAY: Record<Role, string> = {
   graphic_designer: "Graphic Designer",
   journalist: "Journalist",
   architect: "Architect",
+  // Phase 2D — Healthcare
+  midwife: "Midwife",
+  paramedic: "Paramedic / EMT",
+  radiographer: "Radiographer",
+  dental_hygienist: "Dental Hygienist",
+  medical_assistant: "Medical Assistant",
+  occupational_therapist: "Occupational Therapist",
+  speech_therapist: "Speech-Language Therapist",
+  veterinarian: "Veterinarian",
+  optometrist: "Optometrist",
+  anesthetist: "Anesthesiologist",
+  surgeon: "Surgeon",
+  psychiatrist: "Psychiatrist",
+  pediatrician: "Pediatrician",
+  // Phase 2D — Tech
+  mobile_developer: "Mobile Developer",
+  backend_engineer: "Backend Engineer",
+  frontend_engineer: "Frontend Engineer",
+  cloud_architect: "Cloud Architect",
+  site_reliability: "Site Reliability Engineer",
+  security_engineer: "Application Security Engineer",
+  ml_engineer: "Machine Learning Engineer",
+  ai_engineer: "AI Engineer",
+  data_engineer: "Data Engineer",
+  // Phase 2D — Business / Finance
+  auditor: "Auditor",
+  tax_consultant: "Tax Consultant",
+  credit_analyst: "Credit Analyst",
+  business_analyst: "Business Analyst",
+  // Phase 2D — Marketing
+  digital_marketer: "Digital Marketer",
+  seo_specialist: "SEO Specialist",
+  social_media_manager: "Social Media Manager",
+  pr_manager: "PR Manager",
+  brand_manager: "Brand Manager",
+  // Phase 2D — Education
+  librarian: "Librarian",
+  early_childhood_educator: "Early Childhood Educator",
+  esl_teacher: "ESL / TEFL Teacher",
+  special_ed_teacher: "Special Education Teacher",
+  // Phase 2D — Trades
+  hvac_technician: "HVAC Technician",
+  bus_driver: "Bus Driver",
+  delivery_driver: "Delivery Driver",
+  crane_operator: "Crane Operator",
+  forklift_operator: "Forklift Operator",
+  shipping_clerk: "Shipping Clerk",
+  // Phase 2D — Service
+  baker: "Baker",
+  pastry_chef: "Pastry Chef",
+  sous_chef: "Sous Chef",
+  head_chef: "Head Chef / Executive Chef",
 };
 
 export const CURRENCY_RATES: Record<Currency, number> = {
@@ -371,6 +507,58 @@ export const ROLE_LABELS: readonly RoleLabel[] = [
   { key: "graphic_designer", label: "Graphic Designer", keywords: ["graphic designer", "illustrator", "visual designer", "print designer", "brand designer"] },
   { key: "journalist", label: "Journalist / Writer", keywords: ["journalist", "writer", "reporter", "editor", "copywriter", "content writer", "blogger"] },
   { key: "architect", label: "Architect", keywords: ["architect", "architectural", "designer building"] },
+  // Phase 2D — Healthcare
+  { key: "midwife", label: "Midwife", keywords: ["midwife", "midwifery", "delivery nurse"] },
+  { key: "paramedic", label: "Paramedic / EMT", keywords: ["paramedic", "emt", "emergency medical technician", "ambulance"] },
+  { key: "radiographer", label: "Radiographer", keywords: ["radiographer", "radiologic technologist", "x-ray technician", "mri tech", "ct tech"] },
+  { key: "dental_hygienist", label: "Dental Hygienist", keywords: ["dental hygienist", "hygienist", "oral hygienist"] },
+  { key: "medical_assistant", label: "Medical Assistant", keywords: ["medical assistant", "clinical assistant", "ma"] },
+  { key: "occupational_therapist", label: "Occupational Therapist", keywords: ["occupational therapist", "ot", "occupational therapy"] },
+  { key: "speech_therapist", label: "Speech-Language Therapist", keywords: ["speech therapist", "speech language pathologist", "slp"] },
+  { key: "veterinarian", label: "Veterinarian", keywords: ["veterinarian", "vet", "veterinary surgeon", "animal doctor"] },
+  { key: "optometrist", label: "Optometrist", keywords: ["optometrist", "eye doctor", "od"] },
+  { key: "anesthetist", label: "Anesthesiologist", keywords: ["anesthetist", "anesthesiologist", "anaesthetist", "anaesthesiologist"] },
+  { key: "surgeon", label: "Surgeon", keywords: ["surgeon", "operating surgeon", "consultant surgeon", "general surgeon"] },
+  { key: "psychiatrist", label: "Psychiatrist", keywords: ["psychiatrist", "psychiatric doctor"] },
+  { key: "pediatrician", label: "Pediatrician", keywords: ["pediatrician", "paediatrician", "children's doctor", "child doctor"] },
+  // Phase 2D — Tech
+  { key: "mobile_developer", label: "Mobile Developer", keywords: ["mobile developer", "ios developer", "android developer", "app developer"] },
+  { key: "backend_engineer", label: "Backend Engineer", keywords: ["backend engineer", "backend developer", "server side", "api developer"] },
+  { key: "frontend_engineer", label: "Frontend Engineer", keywords: ["frontend engineer", "frontend developer", "ui engineer", "react developer", "vue developer"] },
+  { key: "cloud_architect", label: "Cloud Architect", keywords: ["cloud architect", "aws architect", "azure architect", "gcp architect", "solutions architect"] },
+  { key: "site_reliability", label: "Site Reliability Engineer", keywords: ["site reliability", "sre", "reliability engineer"] },
+  { key: "security_engineer", label: "Application Security Engineer", keywords: ["security engineer", "appsec", "application security"] },
+  { key: "ml_engineer", label: "Machine Learning Engineer", keywords: ["ml engineer", "machine learning engineer", "mle"] },
+  { key: "ai_engineer", label: "AI Engineer", keywords: ["ai engineer", "artificial intelligence engineer", "llm engineer"] },
+  { key: "data_engineer", label: "Data Engineer", keywords: ["data engineer", "etl engineer", "data pipeline"] },
+  // Phase 2D — Business / Finance
+  { key: "auditor", label: "Auditor", keywords: ["auditor", "audit", "internal auditor", "external auditor"] },
+  { key: "tax_consultant", label: "Tax Consultant", keywords: ["tax consultant", "tax advisor", "tax preparer"] },
+  { key: "credit_analyst", label: "Credit Analyst", keywords: ["credit analyst", "credit risk", "lending analyst"] },
+  { key: "business_analyst", label: "Business Analyst", keywords: ["business analyst", "ba", "requirements analyst"] },
+  // Phase 2D — Marketing
+  { key: "digital_marketer", label: "Digital Marketer", keywords: ["digital marketer", "digital marketing", "performance marketing"] },
+  { key: "seo_specialist", label: "SEO Specialist", keywords: ["seo specialist", "seo", "search engine optimization", "search marketer"] },
+  { key: "social_media_manager", label: "Social Media Manager", keywords: ["social media manager", "smm", "community manager"] },
+  { key: "pr_manager", label: "PR Manager", keywords: ["pr manager", "public relations", "publicist", "communications manager"] },
+  { key: "brand_manager", label: "Brand Manager", keywords: ["brand manager", "branding", "brand strategist"] },
+  // Phase 2D — Education
+  { key: "librarian", label: "Librarian", keywords: ["librarian", "library", "archivist"] },
+  { key: "early_childhood_educator", label: "Early Childhood Educator", keywords: ["early childhood educator", "ece", "kindergarten teacher", "preschool teacher"] },
+  { key: "esl_teacher", label: "ESL / TEFL Teacher", keywords: ["esl teacher", "tefl", "english as second language", "english teacher abroad"] },
+  { key: "special_ed_teacher", label: "Special Education Teacher", keywords: ["special ed teacher", "special education", "sen teacher"] },
+  // Phase 2D — Trades
+  { key: "hvac_technician", label: "HVAC Technician", keywords: ["hvac technician", "hvac", "air conditioning technician", "heating engineer"] },
+  { key: "bus_driver", label: "Bus Driver", keywords: ["bus driver", "coach driver", "transit driver"] },
+  { key: "delivery_driver", label: "Delivery Driver", keywords: ["delivery driver", "courier", "van driver", "parcel driver"] },
+  { key: "crane_operator", label: "Crane Operator", keywords: ["crane operator", "crane driver", "heavy machinery operator"] },
+  { key: "forklift_operator", label: "Forklift Operator", keywords: ["forklift operator", "forklift driver"] },
+  { key: "shipping_clerk", label: "Shipping Clerk", keywords: ["shipping clerk", "shipping coordinator", "logistics clerk"] },
+  // Phase 2D — Service
+  { key: "baker", label: "Baker", keywords: ["baker", "bakery", "bread maker", "boulanger"] },
+  { key: "pastry_chef", label: "Pastry Chef", keywords: ["pastry chef", "pastry cook", "patissier"] },
+  { key: "sous_chef", label: "Sous Chef", keywords: ["sous chef", "sous-chef", "second chef"] },
+  { key: "head_chef", label: "Head Chef / Executive Chef", keywords: ["head chef", "executive chef", "chef de cuisine"] },
 ];
 
 export const COUNTRY_OPTIONS: ReadonlyArray<{ value: Country; label: string }> = [
